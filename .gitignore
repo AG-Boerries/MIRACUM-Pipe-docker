@@ -1,0 +1,6 @@
+# intellij IDE
+.idea
+
+# tools
+tools/annovar/*
+!tools/annovar/.gitkeep

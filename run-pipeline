@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+function usage() {
+  echo "usage: diz-setup_git_ssh [-ph]"
+  echo "  -t      some param"
+  echo "  -h      show this help screen"
+  exit 1
+}
+
+# TODO: add some parameters and documentation (usage)
+while getopts th option; do
+  case "${option}" in
+
+  t) ;;
+  h) usage ;;
+  esac
+done
+
+# GATK & ANNOVAR
+
+DIR_MIRACUM="/opt/MIRACUM-Pipe/"
+
+# TODO: possibility to run tasks separately (but comfortable)
+
+# TODO: as system user
+docker run --name run-miracum-pipeline --rm miracumpipe:latest \
+  -v ./data:${DIR_MIRACUM}/assets/data \
+  -v ./input:${DIR_MIRACUM}/assets/input \
+  -v ./output:${DIR_MIRACUM}/assets/output \
+  -v ./tools/annovar:${DIR_MIRACUM}/tools/annovar \
+  -v ./databases:${DIR_MIRACUM}/Databases \
+  -v ./references:${DIR_MIRACUM}/assets/references \
+  /opt/MIRACUM-Pipe/run.sh
