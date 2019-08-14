@@ -1,33 +1,74 @@
 #!/usr/bin/env bash
 
+
 function usage() {
-  echo "usage: diz-setup_git_ssh [-ph]"
-  echo "  -t      some param"
+  echo "usage: run-pipeline [-t task] [-d dir]"
+  echo "  -t      specify task ${possible_tasks}"
+  echo "  -d      specify dir"
   echo "  -h      show this help screen"
   exit 1
 }
 
-# TODO: add some parameters and documentation (usage)
-while getopts th option; do
+while getopts tdh option; do
   case "${option}" in
-
-  t) ;;
+  t) task=$OPTARG;;
+  d) dir=$OPTARG;;
   h) usage ;;
+   \?)
+    echo "Unknown option: -$OPTARG" >&2
+    exit 1
+    ;;
+  :)
+    echo "Missing option argument for -$OPTARG" >&2
+    exit 1
+    ;;
+  *)
+    echo "Unimplemented option: -$OPTARG" >&2
+    exit 1
+    ;;
   esac
 done
 
-# GATK & ANNOVAR
+possible_tasks=("GD TD VC CNV Report")
+
+for value in "${possible_tasks[@]}"
+do
+  [[ "${task}" = "${value}" ]] && \
+    echo "unknown task: ${task}" && \
+    echo "use one of the following values: $(join_by ' ' ${possible_tasks})" && \
+    exit 1
+done
 
 DIR_MIRACUM="/opt/MIRACUM-Pipe/"
+DOCKER_COMMAND="docker run --name run-miracum-pipeline --rm miracumpipe:latest \
+          -u $(id -u "${USER}") \
+          -v ./data:${DIR_MIRACUM}/assets/data \
+          -v ./input:${DIR_MIRACUM}/assets/input \
+          -v ./output:${DIR_MIRACUM}/assets/output \
+          -v ./tools/annovar:${DIR_MIRACUM}/tools/annovar \
+          -v ./tools/gatk:${DIR_MIRACUM}/tools/gatk \
+          -v ./databases:${DIR_MIRACUM}/Databases \
+          -v ./references:${DIR_MIRACUM}/assets/references"
 
-# TODO: possibility to run tasks separately (but comfortable)
 
-# TODO: as system user
-docker run --name run-miracum-pipeline --rm miracumpipe:latest \
-  -v ./data:${DIR_MIRACUM}/assets/data \
-  -v ./input:${DIR_MIRACUM}/assets/input \
-  -v ./output:${DIR_MIRACUM}/assets/output \
-  -v ./tools/annovar:${DIR_MIRACUM}/tools/annovar \
-  -v ./databases:${DIR_MIRACUM}/Databases \
-  -v ./references:${DIR_MIRACUM}/assets/references \
-  /opt/MIRACUM-Pipe/run.sh
+if [[ -z "${dir}" && -z "${task}" ]]; then
+  ${DOCKER_COMMAND} ${DIR_MIRACUM}/run.sh
+else
+  # possibility to comfortably run tasks separately
+  case ${task} in
+    cnv)
+      ${DOCKER_COMMAND} ${DIR_MIRACUM}/make_cnv.sh -d "${dir}"
+    ;;
+
+    vc)
+      ${DOCKER_COMMAND} ${DIR_MIRACUM}/make_vc.sh -d "${dir}"
+    ;;
+    report)
+      ${DOCKER_COMMAND} ${DIR_MIRACUM}/make_report.sh -d "${dir}"
+    ;;
+
+    default)
+      ${DOCKER_COMMAND} ${DIR_MIRACUM}/createSet.sh -d "${dir}"
+    ;;
+  esac
+fi
