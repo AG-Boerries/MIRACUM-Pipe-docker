@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+SCRIPT_PATH=$(
+  cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
+  pwd -P
+)
+
+version_GATK="3.8-1-0-gf15c1c3ef"
+
+########
+# GATK #
+########
+cd "${SCRIPT_PATH}"/tools || exit 1
+
+echo "fetching gatk"
+# download new version
+wget "https://software.broadinstitute.org/gatk/download/auth?package=GATK-archive&version=${version_GATK}" \
+    -O gatk.zip
+
+# unzip
+unzip -o gatk.zip
+rm -f gatk.zip
+
+# rename folder and file (neglect version information)
+mv GenomeAnalysisTK* gatk
+
+echo "done"
+
+
+###########
+# annovar #
+###########
+cd "${SCRIPT_PATH}"/tools || exit 1
+
+echo "please visit http://download.openbioinformatics.org/annovar_download_form.php to get the download link for annovar"
+echo "enter annovar download link:"
+read -r url_annovar
+
+echo "fetching annovar"
+wget "${url_annovar}" \
+    -O annovar.tar.gz
+
+# unpack
+tar -xzf annovar.tar.gz
+rm -f annovar.tar.gz
+
+# Download needed databases directly from ANNOVAR
+annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb/
+annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp35a humandb/
+annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad_exome humandb/
+annotate_variation.pl -buildver hg19 -downdb -webfrom annovar exac03 humandb/
+annotate_variation.pl -buildver hg19 -downdb -webfrom annovar esp6500siv2_ea humandb/
+annotate_variation.pl -buildver hg19 -downdb -webfrom annovar 1000g2015aug humandb/
+annotate_variation.pl -buildver hg19 -downdb -webfrom annovar avsnp150 humandb/
+annotate_variation.pl -buildver hg19 -downdb -webfrom annovar clinvar_20180603 humandb/
+annotate_variation.pl -buildver hg19 -downdb -webfrom annovar intervar_20180118 humandb/
+
+echo "done"
+
