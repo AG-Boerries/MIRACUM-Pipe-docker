@@ -5,6 +5,8 @@ SCRIPT_PATH=$(
   pwd -P
 )
 
+# TODO: flag install without Databases
+
 version_GATK="3.8-1-0-gf15c1c3ef"
 
 ########
@@ -15,14 +17,15 @@ cd "${SCRIPT_PATH}"/tools || exit 1
 echo "fetching gatk"
 # download new version
 wget "https://software.broadinstitute.org/gatk/download/auth?package=GATK-archive&version=${version_GATK}" \
-    -O gatk.zip
+    -O gatk.tar.bz2
 
-# unzip
-unzip -o gatk.zip
-rm -f gatk.zip
+# unpack
+tar xjf gatk.tar.bz2
+rm -f gatk.tar.bz2
 
 # rename folder and file (neglect version information)
-mv GenomeAnalysisTK* gatk
+mv GenomeAnalysisTK*/* gatk/
+rm -rf GenomeAnalysisTK*
 
 echo "done"
 
@@ -44,16 +47,19 @@ wget "${url_annovar}" \
 tar -xzf annovar.tar.gz
 rm -f annovar.tar.gz
 
-# Download needed databases directly from ANNOVAR
-annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb/
-annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp35a humandb/
-annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad_exome humandb/
-annotate_variation.pl -buildver hg19 -downdb -webfrom annovar exac03 humandb/
-annotate_variation.pl -buildver hg19 -downdb -webfrom annovar esp6500siv2_ea humandb/
-annotate_variation.pl -buildver hg19 -downdb -webfrom annovar 1000g2015aug humandb/
-annotate_variation.pl -buildver hg19 -downdb -webfrom annovar avsnp150 humandb/
-annotate_variation.pl -buildver hg19 -downdb -webfrom annovar clinvar_20180603 humandb/
-annotate_variation.pl -buildver hg19 -downdb -webfrom annovar intervar_20180118 humandb/
+cd annovar
+
+# TODO: if not flag
+# Download required databases directly from ANNOVAR
+./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb/
+./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp35a humandb/
+./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad_exome humandb/
+./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar exac03 humandb/
+./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar esp6500siv2_ea humandb/
+./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar 1000g2015aug humandb/
+./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar avsnp150 humandb/
+./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar clinvar_20180603 humandb/
+./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar intervar_20180118 humandb/
 
 echo "done"
 

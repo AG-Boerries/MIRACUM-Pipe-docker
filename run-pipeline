@@ -6,7 +6,7 @@ function usage() {
   echo "usage: run-pipeline [-t task] [-d dir]"
   echo "  -t      specify task ${possible_tasks}"
   echo "  -f      specify forced run, i.e. neglecting if a patient already was computed"
-  echo "  -d      specify dir"
+  echo "  -d      specify relative patient dir (e.g. patient_xy)"
   echo "  -h      show this help screen"
   exit 1
 }
@@ -41,16 +41,9 @@ do
 done
 
 DIR_MIRACUM="/opt/MIRACUM-Pipe/"
-DOCKER_COMMAND="docker run --name run-miracum-pipeline --rm miracumpipe:latest \
-          -u $(id -u "${USER}") \
-          -v ./data:${DIR_MIRACUM}/assets/data \
-          -v ./input:${DIR_MIRACUM}/assets/input \
-          -v ./output:${DIR_MIRACUM}/assets/output \
-          -v ./tools/annovar:${DIR_MIRACUM}/tools/annovar \
-          -v ./tools/gatk:${DIR_MIRACUM}/tools/gatk \
-          -v ./databases:${DIR_MIRACUM}/Databases \
-          -v ./references:${DIR_MIRACUM}/assets/references"
+DOCKER_COMMAND=""
 
+# TODO: conf as volume
 
 # call script
 if [[ ${forced} ]]; then
@@ -65,4 +58,13 @@ if [[ ${dir} ]]; then
   OPT_ARGS="${OPT_ARGS} -d ${dir}"
 fi
 
-${DOCKER_COMMAND} ${DIR_MIRACUM}/run.sh ${OPT_ARGS}
+# TODO: conf mount (if folder/file exists)
+
+docker run --name run-miracum-pipeline --rm \
+  -u $(id -u "${USER}") \
+  -v $(pwd)/input:${DIR_MIRACUM}/assets/input \
+  -v $(pwd)/output:${DIR_MIRACUM}/assets/output \
+  -v $(pwd)/tools/annovar:${DIR_MIRACUM}/tools/annovar \
+  -v $(pwd)/tools/gatk:${DIR_MIRACUM}/tools/gatk \
+  -v $(pwd)/databases:${DIR_MIRACUM}/Databases \
+  -v $(pwd)/references:${DIR_MIRACUM}/assets/references miracumpipe:latest ${DIR_MIRACUM}/run.sh ${OPT_ARGS}
