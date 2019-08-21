@@ -5,14 +5,16 @@ possible_tasks=("GD TD VC CNV Report")
 function usage() {
   echo "usage: run-pipeline [-t task] [-d dir]"
   echo "  -t      specify task ${possible_tasks}"
+  echo "  -f      specify forced run, i.e. neglecting if a patient already was computed"
   echo "  -d      specify dir"
   echo "  -h      show this help screen"
   exit 1
 }
 
-while getopts tdh option; do
+while getopts t:d:fh option; do
   case "${option}" in
   t) task=$OPTARG;;
+  f) forced=$OPTARG;;
   d) dir=$OPTARG;;
   h) usage ;;
    \?)
@@ -51,4 +53,16 @@ DOCKER_COMMAND="docker run --name run-miracum-pipeline --rm miracumpipe:latest \
 
 
 # call script
-${DOCKER_COMMAND} ${DIR_MIRACUM}/run.sh -d "${dir}" -t "${task}"
+if [[ ${forced} ]]; then
+  OPT_ARGS='-f'
+fi
+
+if [[ ${task} ]]; then
+  OPT_ARGS="${OPT_ARGS} -t ${task}"
+fi
+
+if [[ ${dir} ]]; then
+  OPT_ARGS="${OPT_ARGS} -d ${dir}"
+fi
+
+${DOCKER_COMMAND} ${DIR_MIRACUM}/run.sh ${OPT_ARGS}
