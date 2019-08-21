@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+possible_tasks=("GD TD VC CNV Report")
 
 function usage() {
   echo "usage: run-pipeline [-t task] [-d dir]"
@@ -29,8 +30,6 @@ while getopts tdh option; do
   esac
 done
 
-possible_tasks=("GD TD VC CNV Report")
-
 for value in "${possible_tasks[@]}"
 do
   [[ "${task}" = "${value}" ]] && \
@@ -51,24 +50,5 @@ DOCKER_COMMAND="docker run --name run-miracum-pipeline --rm miracumpipe:latest \
           -v ./references:${DIR_MIRACUM}/assets/references"
 
 
-if [[ -z "${dir}" && -z "${task}" ]]; then
-  ${DOCKER_COMMAND} ${DIR_MIRACUM}/run.sh
-else
-  # possibility to comfortably run tasks separately
-  case ${task} in
-    cnv)
-      ${DOCKER_COMMAND} ${DIR_MIRACUM}/make_cnv.sh -d "${dir}"
-    ;;
-
-    vc)
-      ${DOCKER_COMMAND} ${DIR_MIRACUM}/make_vc.sh -d "${dir}"
-    ;;
-    report)
-      ${DOCKER_COMMAND} ${DIR_MIRACUM}/make_report.sh -d "${dir}"
-    ;;
-
-    default)
-      ${DOCKER_COMMAND} ${DIR_MIRACUM}/createSet.sh -d "${dir}"
-    ;;
-  esac
-fi
+# call script
+${DOCKER_COMMAND} ${DIR_MIRACUM}/run.sh -d "${dir}" -t "${task}"
