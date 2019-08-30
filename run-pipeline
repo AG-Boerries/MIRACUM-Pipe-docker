@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-possible_tasks=("GD TD VC CNV Report")
+readonly VALID_TASKS=("GD TD VC CNV Report")
 
 function usage() {
   echo "usage: run-pipeline [-t task] [-d dir]"
-  echo "  -t      specify task ${possible_tasks}"
+  echo "  -t      specify task ${VALID_TASKS}"
   echo "  -f      specify forced run, i.e. neglecting if a patient already was computed"
   echo "  -d      specify relative patient dir (e.g. patient_xy)"
   echo "  -h      show this help screen"
@@ -13,9 +13,9 @@ function usage() {
 
 while getopts t:d:fh option; do
   case "${option}" in
-  t) task=$OPTARG;;
-  f) forced=$OPTARG;;
-  d) dir=$OPTARG;;
+  t) readonly PARAM_TASK=$OPTARG;;
+  f) readonly PARAM_FORCED=$OPTARG;;
+  d) readonly PARAM_DIR_PATIENT=$OPTARG;;
   h) usage ;;
    \?)
     echo "Unknown option: -$OPTARG" >&2
@@ -32,36 +32,40 @@ while getopts t:d:fh option; do
   esac
 done
 
-for value in "${possible_tasks[@]}"
+for value in "${VALID_TASKS[@]}"
 do
-  [[ "${task}" = "${value}" ]] && \
-    echo "unknown task: ${task}" && \
-    echo "use one of the following values: $(join_by ' ' ${possible_tasks})" && \
+  [[ "${PARAM_TASK}" = "${value}" ]] && \
+    echo "unknown task: ${PARAM_TASK}" && \
+    echo "use one of the following values: $(join_by ' ' ${VALID_TASKS})" && \
     exit 1
 done
 
-DIR_MIRACUM="/opt/MIRACUM-Pipe/"
-DOCKER_COMMAND=""
+readonly DIR_MIRACUM="/opt/MIRACUM-Pipe"
 
 # TODO: conf as volume
+if [[ -d $(pwd)/conf ]]; then
+  readonly VOLUME_CONF="-v $(pwd)/conf:${DIR_MIRACUM}/conf"
+fi
 
 # call script
-if [[ ${forced} ]]; then
-  OPT_ARGS='-f'
+if [[ ${PARAM_FORCED} ]]; then
+  opt_args='-f'
 fi
 
-if [[ ${task} ]]; then
-  OPT_ARGS="${OPT_ARGS} -t ${task}"
+if [[ ${PARAM_TASK} ]]; then
+  opt_args="${opt_args} -t ${PARAM_TASK}"
 fi
 
-if [[ ${dir} ]]; then
-  OPT_ARGS="${OPT_ARGS} -d ${dir}"
+if [[ ${PARAM_DIR_PATIENT} ]]; then
+  opt_args="${opt_args} -d ${PARAM_DIR_PATIENT}"
 fi
 
 # TODO: conf mount (if folder/file exists)
-
-docker run --name run-miracum-pipeline --rm \
+echo "running ${DIR_MIRACUM}/run.sh ${opt_args} inside docker image miracumpipe:latest"
+echo "---"
+docker run -it --name run-miracum-pipeline --rm \
   -u $(id -u "${USER}") \
+  --tmpfs /tmp:exec ${VOLUME_CONF} \
   -v $(pwd)/input:${DIR_MIRACUM}/assets/input \
   -v $(pwd)/output:${DIR_MIRACUM}/assets/output \
   -v $(pwd)/tools/annovar:${DIR_MIRACUM}/tools/annovar \
