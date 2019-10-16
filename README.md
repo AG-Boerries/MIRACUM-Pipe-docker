@@ -1,4 +1,10 @@
 # MIRACUM-Pipe-docker
-application using the dockerized version of MIRACUM-Pipe
+This repo offers a framework to easily work with the dockerized version of [MIRACUM-Pipe](https://github.com/AG-Boerries/MIRACUM-Pipe)
 
-Currently under heavy development
+## Setup and Installation
+
+## How to run it
+
+
+## License
+
