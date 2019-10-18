@@ -77,5 +77,4 @@ docker run -it --name run-miracum-pipeline --rm ${TMP_RAM} \
   -v "$(pwd)/tools/annovar:${DIR_MIRACUM}/tools/annovar" \
   -v "$(pwd)/tools/gatk:${DIR_MIRACUM}/tools/gatk" \
   -v "$(pwd)/databases:${DIR_MIRACUM}/Databases" \
-  -v "$(pwd)/references:${DIR_MIRACUM}/assets/references" miracumpipe:${PIPELINE_VERSION} "${DIR_MIRACUM}"/miracum_pipe.sh ${opt_args}
-#  "${DIR_MIRACUM}"/miracum_pipe.sh "${opt_args}"
+  -v "$(pwd)/references:${DIR_MIRACUM}/assets/references" miracumpipe:${PIPELINE_VERSION} /bin/bash
