@@ -67,7 +67,6 @@ if [[ ${PARAM_DIR_PATIENT} ]]; then
   readonly TMP_RAM="--tmpfs /tmp:exec ${VOLUME_CONF}"
 fi
 
-# TODO: conf mount (if folder/file exists)
 echo "running \"${DIR_MIRACUM}/miracum_pipe.sh ${opt_args}\" inside docker image miracumpipe:${PIPELINE_VERSION}"
 echo "---"
 docker run -it --name run-miracum-pipeline --rm ${TMP_RAM} \
