@@ -5,61 +5,178 @@ SCRIPT_PATH=$(
   pwd -P
 )
 
-# TODO: flag install without Databases
+readonly VALID_TASKS=("all db tools")
 
+function join_by { local IFS="$1"; shift; echo "$*"; }
+
+function usage() {
+  echo "usage: setup -t task"
+  echo "  -t  task            specify task: $(join_by ' ' ${VALID_TASKS})"
+  echo "  -h                  show this help screen"
+  exit 1
+}
+
+while getopts d:t:ph option; do
+  case "${option}" in
+  d) readonly PARAM_DIR_PATIENT=$OPTARG ;;
+  t) PARAM_TASK=$OPTARG ;;
+  h) usage ;;
+  \?)
+    echo "Unknown option: -$OPTARG" >&2
+    exit 1
+    ;;
+  :)
+    echo "Missing option argument for -$OPTARG" >&2
+    exit 1
+    ;;
+  *)
+    echo "Unimplemented option: -$OPTARG" >&2
+    exit 1
+    ;;
+  esac
+done
+
+# if no patient is defined
+if [[ -z "${PARAM_TASK}" ]]; then
+  PARAM_TASK='all'
+fi
+
+
+
+if [[ ! " ${VALID_TASKS[@]} " =~ " ${PARAM_TASK} " ]]; then
+  echo "unknown task: ${PARAM_TASK}"
+  echo "use one of the following values: $(join_by ' ' ${VALID_TASKS})"
+  exit 1
+fi
+
+# TODO: flag install specific components: db, tools, example
+
+DIR_TOOLS="${SCRIPT_PATH}/tools"
+DIR_DATABASES="${SCRIPT_PATH}/databases"
+
+# TOOLS
+######################################################################################
 version_GATK="3.8-1-0-gf15c1c3ef"
 
 ########
 # GATK #
 ########
-cd "${SCRIPT_PATH}"/tools || exit 1
+function install_tool_gatk() {
+  echo "installing tool gatk"
+  cd "${DIR_TOOLS}" || exit 1
 
-echo "fetching gatk"
-# download new version
-wget "https://software.broadinstitute.org/gatk/download/auth?package=GATK-archive&version=${version_GATK}" \
-    -O gatk.tar.bz2
+  echo "fetching gatk"
+  # download new version
+  wget "https://software.broadinstitute.org/gatk/download/auth?package=GATK-archive&version=${version_GATK}" \
+      -O gatk.tar.bz2
 
-# unpack
-tar xjf gatk.tar.bz2
-rm -f gatk.tar.bz2
+  # unpack
+  tar xjf gatk.tar.bz2
+  rm -f gatk.tar.bz2
 
-# rename folder and file (neglect version information)
-mv GenomeAnalysisTK*/* gatk/
-rm -rf GenomeAnalysisTK*
+  # rename folder and file (neglect version information)
+  mv GenomeAnalysisTK*/* gatk/
+  rm -rf GenomeAnalysisTK*
 
-echo "done"
+  echo "done"
+}
+
 
 
 ###########
 # annovar #
 ###########
-cd "${SCRIPT_PATH}"/tools || exit 1
+function install_tool_annovar() {
+  echo "installing tool annovar"
 
-echo "please visit http://download.openbioinformatics.org/annovar_download_form.php to get the download link for annovar"
-echo "enter annovar download link:"
-read -r url_annovar
+  cd "${DIR_TOOLS}" || exit 1
 
-echo "fetching annovar"
-wget "${url_annovar}" \
-    -O annovar.tar.gz
+  echo "please visit http://download.openbioinformatics.org/annovar_download_form.php to get the download link for annovar via an email"
+  echo "enter annovar download link:"
+  read -r url_annovar
 
-# unpack
-tar -xzf annovar.tar.gz
-rm -f annovar.tar.gz
+  echo "fetching annovar"
+  wget "${url_annovar}" \
+      -O annovar.tar.gz
 
-cd annovar
+  # unpack
+  tar -xzf annovar.tar.gz
+  rm -f annovar.tar.gz
 
-# TODO: if not flag
-# Download required databases directly from ANNOVAR
-./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb/
-./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp35a humandb/
-./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad_exome humandb/
-./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar exac03 humandb/
-./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar esp6500siv2_ea humandb/
-./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar 1000g2015aug humandb/
-./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar avsnp150 humandb/
-./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar clinvar_20180603 humandb/
-./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar intervar_20180118 humandb/
+  cd annovar
 
-echo "done"
+  # TODO: if not flag
+  # Download required databases directly from ANNOVAR
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb/
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp35a humandb/
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad_exome humandb/
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar exac03 humandb/
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar esp6500siv2_ea humandb/
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar 1000g2015aug humandb/
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar avsnp150 humandb/
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar clinvar_20180603 humandb/
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar intervar_20180118 humandb/
 
+  echo "done"
+}
+
+
+# databases
+######################################################################################
+function install_databases() {
+  echo "installing databases"
+
+  BIN_RSCRIPT=$(which Rscript)
+  if [[ -z "${BIN_RSCRIPT}" ]]; then
+    echo "Rscript needs to be available and in PATH in order to install the databases"
+    exit 1
+  fi
+
+  cd "${DIR_DATABASES}" || exit 1
+
+  # dbSNP
+  wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz -O snp150hg19.vcf.gz
+  wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz.tbi -O snp150hg19.vcf.gz.tbi
+
+  # CancerGenes
+  wget https://github.com/oncokb/oncokb-public/blob/master/data/v1.15/CancerGenesList.txt
+
+  # Cancer Hotspots
+  wget http://www.cancerhotspots.org/files/hotspots_v2.xls
+
+  # DGIdb
+  wget http://www.dgidb.org/data/interactions.tsv -O DGIdb_interactions.tsv
+
+  # Actionable alterations
+  wget https://oncokb.org/api/v1/utils/allActionableVariants.txt
+
+  ## R Code for processing
+  ${BIN_RSCRIPT} --vanilla -<<EOF
+library(GSA)
+gmt <- GSA.read.gmt('h.all.v7.0.entrez.gmt')
+genesets <- gmt$genesets
+names <- data.frame(Names = gmt$geneset.names, Descriptions = gmt$geneset.descriptions)
+names(genesets) <- names$Names
+hallmark <- genesets
+save(hallmarksOfCancer, file = "hallmarksOfCancer_GeneSets.Rdata")
+EOF
+
+}
+
+case "${PARAM_TASK}" in
+  "tools") 
+    install_tool_gatk
+    install_tool_annovar
+  ;;
+
+  "db") 
+    install_databases
+  ;;
+
+  *) 
+    install_tool_gatk
+    install_tool_annovar
+
+    install_databases
+  ;;
+esac
