@@ -6,7 +6,7 @@ In order to run the miracum pipeline, one needs to setup tools and databases whi
 We prepared this project in a way which allows you to easily add the specific components into the pipeline. Although most components can be installed by the shipped `setup` script, some need manual interaction:
 
 - tools
-  - [annovar]()
+  - [annovar](http://download.openbioinformatics.org/annovar_download_form.php)
 
 - databases
   - [hallmarks of cancer](http://bbglab.irbbarcelona.org)
