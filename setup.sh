@@ -5,7 +5,7 @@ SCRIPT_PATH=$(
   pwd -P
 )
 
-readonly VALID_TASKS=("all db tools")
+readonly VALID_TASKS=("all db_setup db tools tools_setup ref")
 
 function join_by { local IFS="$1"; shift; echo "$*"; }
 
@@ -53,6 +53,26 @@ fi
 
 DIR_TOOLS="${SCRIPT_PATH}/tools"
 DIR_DATABASES="${SCRIPT_PATH}/databases"
+DIR_REF="${SCRIPT_PATH}/references"
+
+
+# REF
+######################################################################################
+function setup_references() {
+  # Genome UCSC
+  wget ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Homo_sapiens/UCSC/hg19/Homo_sapiens_UCSC_hg19.tar.gz
+  tar -xzf Homo_sapiens_UCSC_hg19.tar.gz -C references
+  rm -f Homo_sapiens_UCSC_hg19.tar.gz
+
+  # ControlFREEC MappabilityFile
+  wget https://xfer.curie.fr/get/nil/7hZIk1C63h0/hg19_len100bp.tar.gz
+  tar -xzf hg19_len100bp.tar.gz -C references
+
+  # Chromosome length for hg19
+  wget http://bioinfo-out.curie.fr/projects/freec/src/hg19.len -O reference/Homo_sapiens/UCSC/hg19/Sequence/Chromosomes/hg19.len
+}
+
+
 
 # TOOLS
 ######################################################################################
@@ -105,8 +125,16 @@ function install_tool_annovar() {
 
   cd annovar
 
-  # TODO: if not flag
-  # Download required databases directly from ANNOVAR
+  echo "done"
+}
+
+function setup_tool_annovar() {
+  echo "setup tool annovar"
+  echo "download databases"
+
+  cd "${DIR_TOOLS}/annovar" || exit 1
+
+  # Download proposed databases directly from ANNOVAR
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb/
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp35a humandb/
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad_exome humandb/
@@ -120,23 +148,16 @@ function install_tool_annovar() {
   echo "done"
 }
 
-
 # databases
 ######################################################################################
 function install_databases() {
   echo "installing databases"
 
-  BIN_RSCRIPT=$(which Rscript)
-  if [[ -z "${BIN_RSCRIPT}" ]]; then
-    echo "Rscript needs to be available and in PATH in order to install the databases"
-    exit 1
-  fi
-
   cd "${DIR_DATABASES}" || exit 1
 
   # dbSNP
-  wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz -O snp150hg19.vcf.gz
-  wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz.tbi -O snp150hg19.vcf.gz.tbi
+  wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz -O "${DIR_REF}/snp150hg19.vcf.gz"
+  wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz.tbi -O "${DIR_REF}/snp150hg19.vcf.gz.tbi"
 
   # CancerGenes
   wget https://github.com/oncokb/oncokb-public/blob/master/data/v1.15/CancerGenesList.txt
@@ -150,6 +171,18 @@ function install_databases() {
   # Actionable alterations
   wget https://oncokb.org/api/v1/utils/allActionableVariants.txt
 
+  echo "done"
+}
+
+function setup_databases() {
+  echo "setup databases"
+
+  BIN_RSCRIPT=$(which Rscript)
+  if [[ -z "${BIN_RSCRIPT}" ]]; then
+    echo "Rscript needs to be available and in PATH in order to install the databases"
+    exit 1
+  fi
+
   ## R Code for processing
   ${BIN_RSCRIPT} --vanilla -<<EOF
 library(GSA)
@@ -161,6 +194,9 @@ hallmark <- genesets
 save(hallmarksOfCancer, file = "hallmarksOfCancer_GeneSets.Rdata")
 EOF
 
+  rm -f h.all.v7.0.entrez.gmt
+
+  echo "done"
 }
 
 case "${PARAM_TASK}" in
