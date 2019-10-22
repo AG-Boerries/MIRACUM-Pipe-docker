@@ -156,8 +156,8 @@ function install_databases() {
   cd "${DIR_DATABASES}" || exit 1
 
   # dbSNP
-  wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz -O "${DIR_REF}/snp150hg19.vcf.gz"
-  wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz.tbi -O "${DIR_REF}/snp150hg19.vcf.gz.tbi"
+  wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz -O "dbSNP/snp150hg19.vcf.gz"
+  wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz.tbi -O "dbSNP/snp150hg19.vcf.gz.tbi"
 
   # CancerGenes
   wget https://github.com/oncokb/oncokb-public/blob/master/data/v1.15/CancerGenesList.txt
