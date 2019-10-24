@@ -40,8 +40,8 @@ There are three levels of configuration:
 - the docker file ships with [default.yaml]() which is setup with default config parameters
 - `conf/custom.yaml` contains settings for the entire runtime environment and overwrites `default.yaml`'s values
 - In each patient directory one a `patient.yaml` can be created in which every setting of the other two configs can be overwritten.
-  
-  
+
+
 ### Setting up a patient
 It is intended to create a patient folder in `input` for each patient containing `patient.yaml`. Further, we recommend to define in it at least the following parameters:
 ```yaml
@@ -49,7 +49,7 @@ sex: XX # or XY
 annotation:
   germline: true # default is false
 ```
-Place the germline R1 and R2 files as well as the tumor files (R1 and R2) into the folder. Either name them `germline_R{1/2}.fastqz.gz` and `tumor_R1.fastq.gz` or adjust your `patient.yaml` accordingly:
+Place the germline R1 and R2 files as well as the tumor files (R1 and R2) into the folder. Either name them `germline_R{1/2}.fastqz.gz` and `tumor_R{1/2}.fastq.gz` or adjust your `patient.yaml` accordingly:
 ```yaml
 [..]
 common:
@@ -57,6 +57,35 @@ common:
     tumor: tumor_R
     germline: germline_R
 ```
+
+### run the pipeline
+There are multiple possibilities to run the pipeline:
+- run complete pipeline on one patient
+  ```
+  ./run-pipeline -d rel_patient_folder
+  ```
+- run a specific task on a given patient
+  ```
+  ./run-pipeline -d rel_patient_folder -t task
+  ```
+- run all unprocessed (no .processed file in the dir) patients
+  ```
+  ./run-pipeline
+  ```
+
+For more information see at the help of the command by running:
+```
+./run-pipeline -h
+```
+
+## Logging
+MIRACUM-pipe writes its logfiles into `output/<patient_name>/log`. For each task in the pipeline an own logfile is created. With the help of these logfiles one can monitor the current status of the pipeline process.
+
+
+## Parallell & sequential computing
+In `conf/custom.yaml` one can setup ressource parameters as cpucores and memory. If not intentionally called the pipeline on as single thread (sequentially), several tasks compute in parallel. The ressources are divided, thus you can enter the real 100% ressource you want to offer the entire pipline processes. Single threaded is intended to be used in case of limited hardware ressources or very large input files.
+
+**BEWARE**: if you set tmp to be a tempfs (into ram), please consider this, while deciding the process ressources.
 
 ## License
 This work is licensed under [GNU Affero General Public License version 3](https://opensource.org/licenses/AGPL-3.0).
