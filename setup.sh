@@ -42,14 +42,12 @@ if [[ -z "${PARAM_TASK}" ]]; then
 fi
 
 
-
 if [[ ! " ${VALID_TASKS[@]} " =~ " ${PARAM_TASK} " ]]; then
   echo "unknown task: ${PARAM_TASK}"
   echo "use one of the following values: $(join_by ' ' ${VALID_TASKS})"
   exit 1
 fi
 
-# TODO: flag install specific components: db, tools, example
 
 DIR_TOOLS="${SCRIPT_PATH}/tools"
 DIR_DATABASES="${SCRIPT_PATH}/databases"
@@ -59,17 +57,18 @@ DIR_REF="${SCRIPT_PATH}/references"
 # REF
 ######################################################################################
 function setup_references() {
-  # Genome UCSC
-  wget ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Homo_sapiens/UCSC/hg19/Homo_sapiens_UCSC_hg19.tar.gz
-  tar -xzf Homo_sapiens_UCSC_hg19.tar.gz -C references
-  rm -f Homo_sapiens_UCSC_hg19.tar.gz
+  # TODO:
+  # # Genome UCSC
+  # wget ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Homo_sapiens/UCSC/hg19/Homo_sapiens_UCSC_hg19.tar.gz
+  # tar -xzf Homo_sapiens_UCSC_hg19.tar.gz -C references
+  # rm -f Homo_sapiens_UCSC_hg19.tar.gz
 
-  # ControlFREEC MappabilityFile
-  wget https://xfer.curie.fr/get/nil/7hZIk1C63h0/hg19_len100bp.tar.gz
-  tar -xzf hg19_len100bp.tar.gz -C references
+  # # ControlFREEC MappabilityFile
+  # wget https://xfer.curie.fr/get/nil/7hZIk1C63h0/hg19_len100bp.tar.gz
+  # tar -xzf hg19_len100bp.tar.gz -C references
 
-  # Chromosome length for hg19
-  wget http://bioinfo-out.curie.fr/projects/freec/src/hg19.len -O reference/Homo_sapiens/UCSC/hg19/Sequence/Chromosomes/hg19.len
+  # # Chromosome length for hg19
+  # wget http://bioinfo-out.curie.fr/projects/freec/src/hg19.len -O reference/Homo_sapiens/UCSC/hg19/Sequence/Chromosomes/hg19.len
 }
 
 
@@ -209,10 +208,24 @@ case "${PARAM_TASK}" in
     install_databases
   ;;
 
+  "db_setup")
+    setup_databases
+  ;;
+
+  "tools_setup")
+    setup_tool_annovar
+  ;;
+
+  "ref")
+    setup_references
+  ;;
+
   *) 
     install_tool_gatk
     install_tool_annovar
+    setup_tool_annovar
 
     install_databases
+    setup_databases
   ;;
 esac
