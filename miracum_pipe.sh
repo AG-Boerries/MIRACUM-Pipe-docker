@@ -71,9 +71,9 @@ echo "running \"${DIR_MIRACUM}/miracum_pipe.sh ${opt_args}\" inside docker image
 echo "---"
 docker run -it --name run-miracum-pipeline --rm ${TMP_RAM} ${VOLUME_CONF} \
   -u $(id -u $USER) \
-  -v "$(pwd)/input:${DIR_MIRACUM}/assets/input" \
-  -v "$(pwd)/output:${DIR_MIRACUM}/assets/output" \
+  -v "$(pwd)/assets/input:${DIR_MIRACUM}/assets/input" \
+  -v "$(pwd)/assets/output:${DIR_MIRACUM}/assets/output" \
+  -v "$(pwd)/assets/references:${DIR_MIRACUM}/assets/references" \
   -v "$(pwd)/tools/annovar:${DIR_MIRACUM}/tools/annovar" \
   -v "$(pwd)/tools/gatk:${DIR_MIRACUM}/tools/gatk" \
-  -v "$(pwd)/databases:${DIR_MIRACUM}/databases" \
-  -v "$(pwd)/references:${DIR_MIRACUM}/assets/references" miracumpipe:"${PIPELINE_VERSION}" "${DIR_MIRACUM}/miracum_pipe.sh" ${opt_args}
+  -v "$(pwd)/databases:${DIR_MIRACUM}/databases" miracumpipe:"${PIPELINE_VERSION}" "${DIR_MIRACUM}/miracum_pipe.sh" ${opt_args}
