@@ -63,17 +63,17 @@ if [[ ${PARAM_DIR_PATIENT} ]]; then
 fi
 
 # tmp in ram
-if [[ ${PARAM_DIR_PATIENT} ]]; then
-  readonly TMP_RAM="--tmpfs /tmp:exec ${VOLUME_CONF}"
+if [[ ${PARAM_RAM} ]]; then
+  readonly TMP_RAM="--tmpfs /tmp:exec"
 fi
 
 echo "running \"${DIR_MIRACUM}/miracum_pipe.sh ${opt_args}\" inside docker image miracumpipe:${PIPELINE_VERSION}"
 echo "---"
-docker run -it --name run-miracum-pipeline --rm ${TMP_RAM} \
+docker run -it --name run-miracum-pipeline --rm ${TMP_RAM} ${VOLUME_CONF} \
   -u $(id -u $USER) \
   -v "$(pwd)/input:${DIR_MIRACUM}/assets/input" \
   -v "$(pwd)/output:${DIR_MIRACUM}/assets/output" \
   -v "$(pwd)/tools/annovar:${DIR_MIRACUM}/tools/annovar" \
   -v "$(pwd)/tools/gatk:${DIR_MIRACUM}/tools/gatk" \
-  -v "$(pwd)/databases:${DIR_MIRACUM}/Databases" \
-  -v "$(pwd)/references:${DIR_MIRACUM}/assets/references" miracumpipe:${PIPELINE_VERSION} /bin/bash
+  -v "$(pwd)/databases:${DIR_MIRACUM}/databases" \
+  -v "$(pwd)/references:${DIR_MIRACUM}/assets/references" miracumpipe:"${PIPELINE_VERSION}" "${DIR_MIRACUM}/miracum_pipe.sh" ${opt_args}
