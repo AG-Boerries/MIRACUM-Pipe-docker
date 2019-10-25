@@ -3,7 +3,8 @@ This repo offers a framework to easily work with the dockerized version of [MIRA
 
 ## Setup and installation
 In order to run the miracum pipeline, one needs to setup tools and databases which we are not allowed to ship due to license issues.
-We prepared this project in a way which allows you to easily add the specific components into the pipeline. Although most components can be installed by the shipped `setup.sh` script, some need manual interaction:
+We prepared this project in a way which allows you to easily add the specific components into the pipeline. 
+Prior running the setup script, some components need to be installed manually interaction:
 
 - tools
   - [annovar](http://download.openbioinformatics.org/annovar_download_form.php)
@@ -15,9 +16,19 @@ We prepared this project in a way which allows you to easily add the specific co
   - [condel score](http://software.broadinstitute.org/gsea/msigdb/)
     - h.all.v7.0.entrez.gmt
 
-For the tool annovar you need the downloadlink. Follow the link and request it by filling out the form. While `setup.sh` is running you'll be asked to enter this download link. Alternatively you could also install annovar by manually extracting it into the folder `tools`.
+For the tool annovar you need the download link. Follow the url above and request the link by filling out the form. They will send you an email. 
+While `setup.sh` is running you'll be asked to enter this download link. Alternatively you could also install annovar by manually extracting it into the folder `tools`.
 To install the databases install follow the link, register and download the listed files. Just place them into the folder `databaeses` of your cloned project.
 
+Next, run the setup script. We recommend to install everything. There are also options to install and setup parts: 
+```
+./setup.sh
+```
+
+See `setup.sh -h` to list the available options. By default, we do not install the reference gene, if you want to install it run
+```
+./setup.sh -t ref
+```
 
 ## How to configure and run it
 The project structure is as follows:
