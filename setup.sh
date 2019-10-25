@@ -51,7 +51,7 @@ fi
 
 DIR_TOOLS="${SCRIPT_PATH}/tools"
 DIR_DATABASES="${SCRIPT_PATH}/databases"
-DIR_REF="${SCRIPT_PATH}/references"
+DIR_REF="${SCRIPT_PATH}/assets/references"
 
 
 # REF
