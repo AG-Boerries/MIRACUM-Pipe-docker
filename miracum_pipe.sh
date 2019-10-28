@@ -16,7 +16,7 @@ function join_by { local IFS="$1"; shift; echo "$*"; }
 while getopts t:d:v:fsh option; do
   case "${option}" in
   t) readonly PARAM_TASK=$OPTARG;;
-  f) readonly PARAM_FORCED=$OPTARG;;
+  f) readonly PARAM_FORCED=true;;
   d) readonly PARAM_DIR_PATIENT=$OPTARG;;
   v) PIPELINE_VERSION=$OPTARG;;
   r) readonly PARAM_RAM=$OPTARG;;
@@ -38,7 +38,7 @@ while getopts t:d:v:fsh option; do
 done
 
 [[ -z "${PIPELINE_VERSION}" ]] && PIPELINE_VERSION='latest'
-[[ ${SHOW_USAGE} ]] && usage "${PIPELINE_VERSION}"
+[[ "${SHOW_USAGE}" ]] && usage "${PIPELINE_VERSION}"
 
 # conf as volume
 if [[ -d $(pwd)/conf ]]; then
@@ -46,24 +46,24 @@ if [[ -d $(pwd)/conf ]]; then
 fi
 
 # call script
-if [[ ${PARAM_FORCED} ]]; then
+if [[ "${PARAM_FORCED}" ]]; then
   opt_args='-f'
 fi
 
-if [[ ${PARAM_TASK} ]]; then
+if [[ "${PARAM_TASK}" ]]; then
   opt_args="${opt_args} -t ${PARAM_TASK}"
 fi
 
-if [[ ${PARAM_SEQ} ]]; then
+if [[ "${PARAM_SEQ}" ]]; then
   opt_args="${opt_args} -s"
 fi
 
-if [[ ${PARAM_DIR_PATIENT} ]]; then
+if [[ "${PARAM_DIR_PATIENT}" ]]; then
   opt_args="${opt_args} -d ${PARAM_DIR_PATIENT}"
 fi
 
 # tmp in ram
-if [[ ${PARAM_RAM} ]]; then
+if [[ "${PARAM_RAM}" ]]; then
   readonly TMP_RAM="--tmpfs /tmp:exec"
 fi
 
