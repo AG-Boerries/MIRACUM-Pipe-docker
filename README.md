@@ -69,7 +69,7 @@ common:
     germline: germline_R
 ```
 
-### run the pipeline
+### Run the pipeline
 There are multiple possibilities to run the pipeline:
 - run complete pipeline on one patient
   ```
@@ -88,6 +88,15 @@ For more information see at the help of the command by running:
 ```
 ./run-pipeline -h
 ```
+
+### Parallel computation
+The MIRACUM-Pipe consits of five major steps (tasks) of which several can be computed in parallel:
+- `td` and `gd`
+- `vc` and `cnv`
+- `report` which is the last task and bases onto the results of the 4 prior tasks
+
+After the pipeline finishes successfully, it creates the file `.processed` into the patient's direcotry. Per default processed patients are skipped. 
+The flag `-f` forces a recomputation and neglects that file. Furhtermore, sometimes it is required to rerun a single task. Therefore, use the flag `-t`.
 
 ## Logging
 MIRACUM-pipe writes its logfiles into `output/<patient_name>/log`. For each task in the pipeline an own logfile is created. With the help of these logfiles one can monitor the current status of the pipeline process.
