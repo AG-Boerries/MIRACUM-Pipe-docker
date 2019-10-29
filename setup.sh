@@ -5,7 +5,7 @@ SCRIPT_PATH=$(
   pwd -P
 )
 
-readonly VALID_TASKS=("all db_setup db tools tools_setup ref")
+readonly VALID_TASKS=("all db_install db_setup tools_install tools_setup ref example")
 
 function join_by { local IFS="$1"; shift; echo "$*"; }
 
@@ -49,28 +49,45 @@ if [[ ! " ${VALID_TASKS[@]} " =~ " ${PARAM_TASK} " ]]; then
 fi
 
 
-DIR_TOOLS="${SCRIPT_PATH}/tools"
-DIR_DATABASES="${SCRIPT_PATH}/databases"
-DIR_REF="${SCRIPT_PATH}/assets/references"
+readonly DIR_TOOLS="${SCRIPT_PATH}/tools"
+readonly DIR_DATABASES="${SCRIPT_PATH}/databases"
+readonly DIR_ASSETS="${SCRIPT_PATH}/assets"
+
+readonly DIR_INPUT="${DIR_ASSETS}/input"
+readonly DIR_REF="${DIR_ASSETS}/references"
+
+readonly DIR_SEQUENCING="${DIR_REF}/sequencing"
+
+# example
+######################################################################################
+function setup_example() {
+  echo "setting up example data"
+  
+  wget "https://some.url" -O Capture_Regions.tar.gz
+  wget "https://some.url" -O data.tar.gz
+
+  tar -xzf Capture_Regions.tar.gz -C "${DIR_SEQUENCING}" && rm -f Capture_Regions.tar.gz
+  tar -xzf Capture_Regions.tar.gz -C "${DIR_INPUT}" && rm -f data.tar.gz
+
+  echo "done"
+}
 
 
 # REF
 ######################################################################################
 function setup_references() {
-  # TODO:
-  # # Genome UCSC
-  # wget ftp://igenome:G3nom3s4u@ussd-ftp.illumina.com/Homo_sapiens/UCSC/hg19/Homo_sapiens_UCSC_hg19.tar.gz
-  # tar -xzf Homo_sapiens_UCSC_hg19.tar.gz -C references
-  # rm -f Homo_sapiens_UCSC_hg19.tar.gz
+  echo "setting up reference data"
 
-  # # ControlFREEC MappabilityFile
-  # wget https://xfer.curie.fr/get/nil/7hZIk1C63h0/hg19_len100bp.tar.gz
-  # tar -xzf hg19_len100bp.tar.gz -C references
+  wget "https://some.url" -O chromosomes.tar.gz
+  wget "https://some.url" -O genome.tar.gz
+  wget "https://some.url" -O mappability.tar.gz
 
-  # # Chromosome length for hg19
-  # wget http://bioinfo-out.curie.fr/projects/freec/src/hg19.len -O reference/Homo_sapiens/UCSC/hg19/Sequence/Chromosomes/hg19.len
+  tar -xzf chromosomes.tar.gz -C "${DIR_REF}/Chromosomes" && rm -f chromosomes.tar.gz
+  tar -xzf genome.tar.gz -C "${DIR_REF}/Genome" && rm -f genome.tar.gz
+  tar -xzf mappability.tar.gz -C "${DIR_REF}/mappability" && rm -f mappability.tar.gz
+
+  echo "done"
 }
-
 
 
 # TOOLS
@@ -199,12 +216,12 @@ EOF
 }
 
 case "${PARAM_TASK}" in
-  "tools") 
+  "tools_install") 
     install_tool_gatk
     install_tool_annovar
   ;;
 
-  "db") 
+  "db_install") 
     install_databases
   ;;
 
@@ -220,6 +237,10 @@ case "${PARAM_TASK}" in
     setup_references
   ;;
 
+  "example")
+    setup_example
+  ;;
+
   *) 
     install_tool_gatk
     install_tool_annovar
@@ -227,5 +248,9 @@ case "${PARAM_TASK}" in
 
     install_databases
     setup_databases
+
+    setup_references
+    setup_example
+
   ;;
 esac
