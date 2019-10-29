@@ -8,6 +8,19 @@ Prior running the setup script, some components need to be installed manually in
 
 - tools
   - [annovar](http://download.openbioinformatics.org/annovar_download_form.php)
+  - Create a database for the latest COSMIC release
+    Download http://www.openbioinformatics.org/annovar/download/prepare_annovar_user.pl and add to annovar folder
+    Register at COSMIC
+    Download:
+    VCF/CosmicCodingMuts.vcf.gz
+    VCF/CosmicNonCodingVariants.vcf.gz
+    CosmicMutantExport.tsv.gz
+    CosmicNCV.tsv.gz
+    unzip all files and build database
+    actual command to build the database for ANNOVAR
+      prepare_annovar_user.pl -dbtype cosmic CosmicMutantExport.tsv -vcf CosmicCodingMuts.vcf > hg19_cosmic87_coding.txt
+      prepare_annovar_user.pl -dbtype cosmic CosmicNCV.tsv -vcf CosmicNonCodingVariants.vcf > hg19_cosmic87_noncoding.txt
+    Move both created files to the annovar/humandb folder.
 
 - databases
   - [hallmarks of cancer](http://bbglab.irbbarcelona.org)
