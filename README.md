@@ -33,14 +33,18 @@ For the tool annovar you need the download link. Follow the url above and reques
 While `setup.sh` is running you'll be asked to enter this download link. Alternatively you could also install annovar by manually extracting it into the folder `tools`.
 To install the databases install follow the link, register and download the listed files. Just place them into the folder `databaeses` of your cloned project.
 
-Next, run the setup script. We recommend to install everything. There are also options to install and setup parts: 
+Next, run the setup script. We recommend to install everything, which dows **not** include the example and reference data. There are also options to install and setup parts: 
 ```
 ./setup.sh
 ```
 
-See `setup.sh -h` to list the available options. By default, we do not install the reference gene, if you want to install it run
+See `setup.sh -h` to list the available options. By default, we do not install the reference gene as well as our example. If you want to install it run
 ```
+# download and setup reference gene
 ./setup.sh -t ref
+
+# download and setup example data
+./setup.sh -t example
 ```
 
 ## How to configure and run it
@@ -71,7 +75,7 @@ It is intended to create a patient folder in `input` for each patient containing
 ```yaml
 sex: XX # or XY
 annotation:
-  germline: true # default is false
+  germline: yes # default is no
 ```
 Place the germline R1 and R2 files as well as the tumor files (R1 and R2) into the folder. Either name them `germline_R{1/2}.fastqz.gz` and `tumor_R{1/2}.fastq.gz` or adjust your `patient.yaml` accordingly:
 ```yaml
