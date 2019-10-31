@@ -48,6 +48,7 @@ if [[ ! " ${VALID_TASKS[@]} " =~ " ${PARAM_TASK} " ]]; then
   exit 1
 fi
 
+[[ -z "$(which wget)" ]] && exit 1
 
 readonly DIR_TOOLS="${SCRIPT_PATH}/tools"
 readonly DIR_DATABASES="${SCRIPT_PATH}/databases"
@@ -61,6 +62,8 @@ readonly DIR_SEQUENCING="${DIR_REF}/sequencing"
 # direct download of any file from gdrive
 # https://stackoverflow.com/questions/25010369/wget-curl-large-file-from-google-drive/49444877#49444877
 function curlgdrive() {
+  [[ -z "$(which curl)" ]] && exit 1
+
   local fileid="${1}"
   local filename="${2}"
   local cookiefile="cookie-${fileid}"
