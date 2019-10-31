@@ -77,7 +77,7 @@ The project structure is as follows:
 
 There are three levels of configuration:
 
-- the docker file ships with [default.yaml]() which is setup with default config parameters
+- the docker file ships with [default.yaml](https://github.com/AG-Boerries/MIRACUM-Pipe/blob/master/conf/default.yaml) which is setup with default config parameters
 - `conf/custom.yaml` contains settings for the entire runtime environment and overwrites `default.yaml`'s values
 - In each patient directory one a `patient.yaml` can be created in which every setting of the other two configs can be overwritten.
 
