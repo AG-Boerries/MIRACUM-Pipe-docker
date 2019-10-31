@@ -40,12 +40,14 @@ For the tool annovar you need the download link. Follow the url above and reques
 While `setup.sh` is running you'll be asked to enter this download link. Alternatively you could also install annovar by manually extracting it into the folder `tools`.
 To install the databases install follow the link, register and download the listed files. Just place them into the folder `databaeses` of your cloned project.
 
-Next, run the setup script. We recommend to install everything, which dows **not** include the example and reference data. There are also options to install and setup parts: 
+Next, run the setup script. We recommend to install everything, which dows **not** include the example and reference data. There are also options to install and setup parts:
+
 ```bash
 ./setup.sh -t all
 ```
 
 See `setup.sh -h` to list the available options. By default, we do not install the reference gene as well as our example. If you want to install it run
+
 ```bash
 # download and setup reference gene
 ./setup.sh -t ref
