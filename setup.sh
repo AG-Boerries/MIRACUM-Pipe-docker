@@ -58,13 +58,28 @@ readonly DIR_REF="${DIR_ASSETS}/references"
 
 readonly DIR_SEQUENCING="${DIR_REF}/sequencing"
 
+# direct download of any file from gdrive
+# https://stackoverflow.com/questions/25010369/wget-curl-large-file-from-google-drive/49444877#49444877
+function curlgdrive() {
+  local fileid="${1}"
+  local filename="${2}"
+  local cookiefile="cookie-${fileid}"
+
+  # download file using cookie information
+  curl -c "${SCRIPT_PATH}/${cookiefile}" -s -L "https://drive.google.com/uc?export=download&id=${fileid}" > /dev/null
+  curl -Lb "${SCRIPT_PATH}/${cookiefile}" "https://drive.google.com/uc?export=download&confirm=`awk '/download/ {print $NF}' ./cookie`&id=${fileid}" -o "${filename}"
+
+  # remove cookie
+  rm -f "${SCRIPT_PATH}/${cookiefile}"
+}
+
 # example
 ######################################################################################
 function setup_example() {
   echo "setting up example data"
   
-  wget "https://some.url" -O Capture_Regions.tar.gz
-  wget "https://some.url" -O data.tar.gz
+  curlgdrive "11dQZzlkwmfdMrXgw_lWKDrjxWcWi_seC" Capture_Regions.tar.gz
+  curlgdrive "1O6OTmB1o_XS5DokGmuZHDujvyRKHQmeP" data.tar.gz
 
   tar -xzf Capture_Regions.tar.gz -C "${DIR_SEQUENCING}" && rm -f Capture_Regions.tar.gz
   tar -xzf Capture_Regions.tar.gz -C "${DIR_INPUT}" && rm -f data.tar.gz
@@ -78,9 +93,9 @@ function setup_example() {
 function setup_references() {
   echo "setting up reference data"
 
-  wget "https://some.url" -O chromosomes.tar.gz
-  wget "https://some.url" -O genome.tar.gz
-  wget "https://some.url" -O mappability.tar.gz
+  curlgdrive "1QZSkniYbI1cWWj8CA6-FS93ViiAn8z_G" chromosomes.tar.gz
+  curlgdrive "1rSC-IuRYhdVvulo2yrSkHSBgVAo4iRt0" genome.tar.gz
+  curlgdrive "1w8PL_J6k0X96W6IkXkjOOi_VnsDaaw8U" mappability.tar.gz
 
   tar -xzf chromosomes.tar.gz -C "${DIR_REF}/Chromosomes" && rm -f chromosomes.tar.gz
   tar -xzf genome.tar.gz -C "${DIR_REF}/Genome" && rm -f genome.tar.gz
