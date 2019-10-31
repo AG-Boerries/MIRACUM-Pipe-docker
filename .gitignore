@@ -1,0 +1,9 @@
+# intellij IDE
+.idea
+
+# tools
+tools/annovar/*
+!tools/annovar/.gitkeep
+
+tools/gatk/*
+!tools/gatk/.gitkeep
