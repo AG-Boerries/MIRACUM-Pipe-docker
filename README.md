@@ -12,7 +12,7 @@ Prior running the setup script, some components need to be installed manually in
   - [annovar](http://download.openbioinformatics.org/annovar_download_form.php)
 
 - databases
-  - [hallmarks of cancer](http://software.broadinstitute.org/gsea/msigdb/)
+  - [hallmark gene-sets](http://software.broadinstitute.org/gsea/msigdb/)
     - h.all.v7.0.entrez.gmt
   - [condel score](https://bbglab.irbbarcelona.org/fannsdb/)
     - fannsdb.tsv.gz
