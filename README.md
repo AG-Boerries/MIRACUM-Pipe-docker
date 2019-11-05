@@ -10,35 +10,17 @@ Prior running the setup script, some components need to be installed manually in
 
 - tools
   - [annovar](http://download.openbioinformatics.org/annovar_download_form.php)
-  - required additional database for annovar
-    - create a database for the latest COSMIC release (according to the [annovar manual](http://annovar.openbioinformatics.org/en/latest/user-guide/filter/#cosmic-annotations))
-      - Download [prepare_annovar_user.pl](http://www.openbioinformatics.org/annovar/download/prepare_annovar_user.pl) and add to annovar folder
-    - register at [COSMIC](https://cancer.sanger.ac.uk/cosmic);
-      - Download the latest release for GRCh37 (as of October 2019 the latest release is v90):
-        - VCF/CosmicCodingMuts.vcf.gz
-        - VCF/CosmicNonCodingVariants.vcf.gz
-        - CosmicMutantExport.tsv.gz
-        - CosmicNCV.tsv.gz
-      - unzip all archives
-    - commands to build the annovar database
-  
-      ```bash
-      prepare_annovar_user.pl -dbtype cosmic CosmicMutantExport.tsv -vcf CosmicCodingMuts.vcf > hg19_cosmic_coding.txt
-      prepare_annovar_user.pl -dbtype cosmic CosmicNCV.tsv -vcf CosmicNonCodingVariants.vcf > hg19_cosmic_noncoding.txt
-      ```
-
-    - Move both created files to the annovar/humandb folder.
 
 - databases
-  - [hallmarks of cancer](http://bbglab.irbbarcelona.org)
+  - [hallmarks of cancer](http://software.broadinstitute.org/gsea/msigdb/)
     - h.all.v7.0.entrez.gmt
-  - [condel score](http://software.broadinstitute.org/gsea/msigdb/)
+  - [condel score](https://bbglab.irbbarcelona.org/fannsdb/)
     - fannsdb.tsv.gz
     - fannsdb.tsv.gz.tbi
 
 For the tool annovar you need the download link. Follow the url above and request the link by filling out the form. They will send you an email.
 While `setup.sh` is running you'll be asked to enter this download link. Alternatively you could also install annovar by manually extracting it into the folder `tools`.
-To install the databases install follow the link, register and download the listed files. Just place them into the folder `databaeses` of your cloned project.
+To install the databases install follow the link, register and download the listed files. Just place them into the folder `databases` of your cloned project.
 
 Next, run the setup script. We recommend to install everything, which dows **not** include the example and reference data. There are also options to install and setup parts:
 
@@ -46,15 +28,34 @@ Next, run the setup script. We recommend to install everything, which dows **not
 ./setup.sh -t all
 ```
 
-See `setup.sh -h` to list the available options. By default, we do not install the reference gene as well as our example. If you want to install it run
+See `setup.sh -h` to list the available options. By default, we do not install the reference genome as well as our example. If you want to install it run
 
 ```bash
-# download and setup reference gene
+# download and setup reference genome
 ./setup.sh -t ref
 
 # download and setup example data
 ./setup.sh -t example
 ```
+
+- annotation rescources for annovar
+  - create a database for the latest COSMIC release (according to the [annovar manual](http://annovar.openbioinformatics.org/en/latest/user-guide/filter/#cosmic-annotations))
+    - Download [prepare_annovar_user.pl](http://www.openbioinformatics.org/annovar/download/prepare_annovar_user.pl) and add to annovar folder
+  - register at [COSMIC](https://cancer.sanger.ac.uk/cosmic);
+    - Download the latest release for GRCh37 (as of October 2019 the latest release is v90):
+      - VCF/CosmicCodingMuts.vcf.gz
+      - VCF/CosmicNonCodingVariants.vcf.gz
+      - CosmicMutantExport.tsv.gz
+      - CosmicNCV.tsv.gz
+    - unzip all archives
+  - commands to build the annovar database
+  
+    ```bash
+    prepare_annovar_user.pl -dbtype cosmic CosmicMutantExport.tsv -vcf CosmicCodingMuts.vcf > hg19_cosmic_coding.txt
+    prepare_annovar_user.pl -dbtype cosmic CosmicNCV.tsv -vcf CosmicNonCodingVariants.vcf > hg19_cosmic_noncoding.txt
+    ```
+
+  - Move both created files to the annovar/humandb folder.
 
 ## How to configure and run it
 
@@ -64,6 +65,7 @@ The project structure is as follows:
 .
 ├── conf
 │   └── custom.yaml
+│   └── default.yaml
 ├── databases
 ├── input
 ├── output
