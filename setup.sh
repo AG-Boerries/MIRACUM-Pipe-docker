@@ -48,7 +48,10 @@ if [[ ! " ${VALID_TASKS[@]} " =~ " ${PARAM_TASK} " ]]; then
   exit 1
 fi
 
-[[ -z "$(which wget)" ]] && exit 1
+if [[ -z "$(which wget)" ]]; then 
+  echo "please install wget and include add it to PATH"
+  exit 1
+fi
 
 readonly DIR_TOOLS="${SCRIPT_PATH}/tools"
 readonly DIR_DATABASES="${SCRIPT_PATH}/databases"
@@ -62,7 +65,10 @@ readonly DIR_SEQUENCING="${DIR_REF}/sequencing"
 # direct download of any file from gdrive
 # https://stackoverflow.com/questions/25010369/wget-curl-large-file-from-google-drive/49444877#49444877
 function curlgdrive() {
-  [[ -z "$(which curl)" ]] && exit 1
+  if [[ -z "$(which curl)" ]]; then
+    echo "please install curl and include add it to PATH"
+    exit 1
+  fi
 
   local fileid="${1}"
   local filename="${2}"
