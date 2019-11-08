@@ -51,8 +51,8 @@ See `setup.sh -h` to list the available options. By default, we do not install t
   - commands to build the annovar database
   
     ```bash
-    prepare_annovar_user.pl -dbtype cosmic CosmicMutantExport.tsv -vcf CosmicCodingMuts.vcf > hg19_cosmic_coding.txt
-    prepare_annovar_user.pl -dbtype cosmic CosmicNCV.tsv -vcf CosmicNonCodingVariants.vcf > hg19_cosmic_noncoding.txt
+    perl prepare_annovar_user.pl -dbtype cosmic CosmicMutantExport.tsv -vcf CosmicCodingMuts.vcf > hg19_cosmic_coding.txt
+    perl prepare_annovar_user.pl -dbtype cosmic CosmicNCV.tsv -vcf CosmicNonCodingVariants.vcf > hg19_cosmic_noncoding.txt
     ```
 
   - Move both created files to the annovar/humandb folder.
@@ -110,25 +110,25 @@ There are multiple possibilities to run the pipeline:
 - run complete pipeline on one patient
   
   ```bash
-  ./run-pipeline -d rel_patient_folder
+  ./miracum_pipe.sh -d rel_patient_folder
   ```
 
 - run a specific task on a given patient
   
   ```bash
-  ./run-pipeline -d rel_patient_folder -t task
+  ./miracum_pipe.sh -d rel_patient_folder -t task
   ```
 
 - run all unprocessed (no .processed file in the dir) patients
   
   ```bash
-  ./run-pipeline
+  ./miracum_pipe.sh
   ```
 
 For more information see at the help of the command by running:
 
 ```bash
-./run-pipeline -h
+./miracum_pipe.sh
 ```
 
 ### Parallel computation

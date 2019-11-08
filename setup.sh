@@ -48,10 +48,7 @@ if [[ ! " ${VALID_TASKS[@]} " =~ " ${PARAM_TASK} " ]]; then
   exit 1
 fi
 
-if [[ -z "$(which wget)" ]]; then 
-  echo "please install wget and include add it to PATH"
-  exit 1
-fi
+[[ -z "$(which wget)" ]] && exit 1
 
 readonly DIR_TOOLS="${SCRIPT_PATH}/tools"
 readonly DIR_DATABASES="${SCRIPT_PATH}/databases"
@@ -65,10 +62,7 @@ readonly DIR_SEQUENCING="${DIR_REF}/sequencing"
 # direct download of any file from gdrive
 # https://stackoverflow.com/questions/25010369/wget-curl-large-file-from-google-drive/49444877#49444877
 function curlgdrive() {
-  if [[ -z "$(which curl)" ]]; then
-    echo "please install curl and include add it to PATH"
-    exit 1
-  fi
+  [[ -z "$(which curl)" ]] && exit 1
 
   local fileid="${1}"
   local filename="${2}"
@@ -76,7 +70,7 @@ function curlgdrive() {
 
   # download file using cookie information
   curl -c "${SCRIPT_PATH}/${cookiefile}" -s -L "https://drive.google.com/uc?export=download&id=${fileid}" > /dev/null
-  curl -Lb "${SCRIPT_PATH}/${cookiefile}" "https://drive.google.com/uc?export=download&confirm=`awk '/download/ {print $NF}' ./cookie`&id=${fileid}" -o "${filename}"
+  curl -Lb "${SCRIPT_PATH}/${cookiefile}" "https://drive.google.com/uc?export=download&confirm=`awk '/download/ {print $NF}' ${SCRIPT_PATH}/${cookiefile}`&id=${fileid}" -o "${filename}"
 
   # remove cookie
   rm -f "${SCRIPT_PATH}/${cookiefile}"
@@ -91,7 +85,7 @@ function setup_example() {
   curlgdrive "16Y_MrgHzr2JQJ1hz0U_RA9ANRauH3CMq" data.tar.gz
 
   tar -xzf Capture_Regions.tar.gz -C "${DIR_SEQUENCING}" && rm -f Capture_Regions.tar.gz
-  tar -xzf Capture_Regions.tar.gz -C "${DIR_INPUT}" && rm -f data.tar.gz
+  tar -xzf data.tar.gz -C "${DIR_INPUT}" && rm -f data.tar.gz
 
   echo "done"
 }
@@ -106,8 +100,8 @@ function setup_references() {
   curlgdrive "1rSC-IuRYhdVvulo2yrSkHSBgVAo4iRt0" genome.tar.gz
   curlgdrive "1w8PL_J6k0X96W6IkXkjOOi_VnsDaaw8U" mappability.tar.gz
 
-  tar -xzf chromosomes.tar.gz -C "${DIR_REF}/Chromosomes" && rm -f chromosomes.tar.gz
-  tar -xzf genome.tar.gz -C "${DIR_REF}/Genome" && rm -f genome.tar.gz
+  tar -xzf chromosomes.tar.gz -C "${DIR_REF}" && rm -f chromosomes.tar.gz
+  tar -xzf genome.tar.gz -C "${DIR_REF}" && rm -f genome.tar.gz
   tar -xzf mappability.tar.gz -C "${DIR_REF}/mappability" && rm -f mappability.tar.gz
 
   echo "done"
@@ -217,6 +211,8 @@ function install_databases() {
 function setup_databases() {
   echo "setup databases"
 
+  cd "${DIR_DATABASES}" || exit 1
+
   BIN_RSCRIPT=$(which Rscript)
   if [[ -z "${BIN_RSCRIPT}" ]]; then
     echo "Rscript needs to be available and in PATH in order to install the databases"
@@ -224,15 +220,7 @@ function setup_databases() {
   fi
 
   ## R Code for processing
-  ${BIN_RSCRIPT} --vanilla -<<EOF
-library(GSA)
-gmt <- GSA.read.gmt('h.all.v7.0.entrez.gmt')
-genesets <- gmt$genesets
-names <- data.frame(Names = gmt$geneset.names, Descriptions = gmt$geneset.descriptions)
-names(genesets) <- names$Names
-hallmark <- genesets
-save(hallmarksOfCancer, file = "hallmarksOfCancer_GeneSets.Rdata")
-EOF
+  ${BIN_RSCRIPT} --vanilla geneset_generation.R
 
   rm -f h.all.v7.0.entrez.gmt
 
