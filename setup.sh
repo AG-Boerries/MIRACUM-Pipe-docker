@@ -81,7 +81,7 @@ function curlgdrive() {
 function setup_example() {
   echo "setting up example data"
   
-  curlgdrive "11dQZzlkwmfdMrXgw_lWKDrjxWcWi_seC" Capture_Regions.tar.gz
+  curlgdrive "1gcCmsqJpbMsLSLmRfo3Afc_aTJVX7ziK" Capture_Regions.tar.gz
   curlgdrive "16Y_MrgHzr2JQJ1hz0U_RA9ANRauH3CMq" data.tar.gz
 
   tar -xzf Capture_Regions.tar.gz -C "${DIR_SEQUENCING}" && rm -f Capture_Regions.tar.gz
@@ -190,11 +190,12 @@ function install_databases() {
   cd "${DIR_DATABASES}" || exit 1
 
   # dbSNP
-  wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz -O "dbSNP/snp150hg19.vcf.gz"
-  wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz.tbi -O "dbSNP/snp150hg19.vcf.gz.tbi"
+  wget https:://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz -O "dbSNP/snp150hg19.vcf.gz"
+  wget https://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz.tbi -O "dbSNP/snp150hg19.vcf.gz.tbi"
 
   # CancerGenes
   wget https://github.com/oncokb/oncokb-public/blob/master/data/v1.15/CancerGenesList.txt
+  https://oncokb.org/api/v1/utils/cancerGeneList.txt
 
   # Cancer Hotspots
   wget http://www.cancerhotspots.org/files/hotspots_v2.xls
