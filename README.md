@@ -99,8 +99,10 @@ Place the germline R1 and R2 files as well as the tumor files (R1 and R2) into t
 [..]
 common:
   files:
-    tumor: tumor_R
-    germline: germline_R
+    tumor_R1: tumor_R1.fastq.gz
+    tumor_R2: tumor_R2.fastq.gz
+    germline_R1: germline_R1.fastq.gz
+    germline_R2: germline_R2.fastq.gz
 ```
 
 ### Run the pipeline
