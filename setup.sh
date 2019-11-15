@@ -80,9 +80,9 @@ function curlgdrive() {
 ######################################################################################
 function setup_example() {
   echo "setting up example data"
-  
+   
   curlgdrive "1gcCmsqJpbMsLSLmRfo3Afc_aTJVX7ziK" Capture_Regions.tar.gz
-  curlgdrive "16Y_MrgHzr2JQJ1hz0U_RA9ANRauH3CMq" data.tar.gz
+  curlgdrive "1YQLyUtkZALZ5Bv-MTvEJJOXAOT_R59Z7" data.tar.gz
 
   tar -xzf Capture_Regions.tar.gz -C "${DIR_SEQUENCING}" && rm -f Capture_Regions.tar.gz
   tar -xzf data.tar.gz -C "${DIR_INPUT}" && rm -f data.tar.gz

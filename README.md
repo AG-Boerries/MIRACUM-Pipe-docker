@@ -65,7 +65,6 @@ The project structure is as follows:
 .
 ├── conf
 │   └── custom.yaml
-│   └── default.yaml
 ├── databases
 ├── input
 ├── output
