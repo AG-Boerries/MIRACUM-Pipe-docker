@@ -153,6 +153,10 @@ In `conf/custom.yaml` one can setup ressource parameters as cpucores and memory.
 
 **BEWARE**: if you set tmp to be a tempfs (into ram), please consider this, while deciding the process ressources.
 
+## Run the docker image behind a proxy
+
+If you need a proxy to connect to the internet you need to change the command running the docker. We provided the needed parameters in the docker run command. You only need to uncomment the lines 86-93 in [miracum_pipe.sh](https://github.com/AG-Boerries/MIRACUM-Pipe-docker/blob/master/miracum_pipe.sh), add the proxy server address and port and comment or delete the lines 76-83.
+
 ## License
 
 This work is licensed under [GNU Affero General Public License version 3](https://opensource.org/licenses/AGPL-3.0).
