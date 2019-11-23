@@ -4,4 +4,4 @@ genesets <- gmt$genesets
 names <- data.frame(Names = gmt$geneset.names, Descriptions = gmt$geneset.descriptions)
 names(genesets) <- names$Names
 hallmarksOfCancer <- genesets
-save(hallmarksOfCancer, file = "hallmarksOfCancer_GeneSets.Rdata")
+save(hallmarksOfCancer, file = "hallmarksOfCancer_GeneSets.RData")
