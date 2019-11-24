@@ -190,7 +190,7 @@ function install_databases() {
   cd "${DIR_DATABASES}" || exit 1
 
   # dbSNP
-  wget https:://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz -O "dbSNP/snp150hg19.vcf.gz"
+  wget https://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz -O "dbSNP/snp150hg19.vcf.gz"
   wget https://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz.tbi -O "dbSNP/snp150hg19.vcf.gz.tbi"
 
   # CancerGenes
