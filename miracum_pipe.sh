@@ -83,7 +83,7 @@ docker run -it --name run-miracum-pipeline --rm ${TMP_RAM} ${VOLUME_CONF} \
   -v "$(pwd)/databases:${DIR_MIRACUM}/databases" ${PARAM_DOCKER_REPO_NAME}:"${PIPELINE_VERSION}" "${DIR_MIRACUM}/miracum_pipe.sh" ${opt_args}
 
 # for running behind a proxy use this commad and fill in your proxy
-#docker run -it --env http_proxy="http://proxy.url.de:port" --env https_proxy="http://proxy.url.de:port" --name run-miracum-pipeline --rm ${TMP_RAM} ${VOLUME_CONF} \
+#docker run -it --env http_proxy="http://proxy.server.de:port" --env https_proxy="http://proxy.server.de:port" --name run-miracum-pipeline --rm ${TMP_RAM} ${VOLUME_CONF} \
 #  -u $(id -u $USER) \
 #  -v "$(pwd)/assets/input:${DIR_MIRACUM}/assets/input" \
 #  -v "$(pwd)/assets/output:${DIR_MIRACUM}/assets/output" \
