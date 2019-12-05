@@ -18,7 +18,7 @@ Prior running the setup script, some components need to be installed manually in
     - fannsdb.tsv.gz
     - fannsdb.tsv.gz.tbi
 
-For running MIRACUM-Pipe the hallmark gene-sets, download link above, need to be formated as a list and stored in a RData file. Inside the setup.sh we provide a R script performing the necessary steps. Therefore, a working [R](https://cran.r-project.org/web/packages/GSA/index.html) togther with the R package [GSA](https://cran.r-project.org/web/packages/GSA/index.html) has to be installed.
+For running MIRACUM-Pipe the hallmark gene-sets, download link above, need to be formated as a list and stored in a RData file. Inside the `setup.sh` we provide a R script performing the necessary steps. Therefore, a working [R](https://cran.r-project.org/web/packages/GSA/index.html) togther with the R package [GSA](https://cran.r-project.org/web/packages/GSA/index.html) has to be installed.
 
 For the tool annovar you need the download link. Follow the url above and request the link by filling out the form. They will send you an email.
 While `setup.sh` is running you'll be asked to enter this download link. Alternatively you could also install annovar by manually extracting it into the folder `tools`.
