@@ -53,8 +53,8 @@ See `setup.sh -h` to list the available options. By default, we do not install t
   - commands to build the annovar database
   
     ```bash
-    perl prepare_annovar_user.pl -dbtype cosmic CosmicMutantExport.tsv -vcf CosmicCodingMuts.vcf > hg19_cosmic_coding.txt
-    perl prepare_annovar_user.pl -dbtype cosmic CosmicNCV.tsv -vcf CosmicNonCodingVariants.vcf > hg19_cosmic_noncoding.txt
+    perl tools/annovar/prepare_annovar_user.pl -dbtype cosmic CosmicMutantExport.tsv -vcf CosmicCodingMuts.vcf > tools/annovar/humandb/hg19_cosmic_coding.txt
+    perl prepare_annovar_user.pl -dbtype cosmic CosmicNCV.tsv -vcf CosmicNonCodingVariants.vcf > tools/annovar/humandb/hg19_cosmic_noncoding.txt
     ```
 
   - Move both created files to the annovar/humandb folder.
@@ -65,12 +65,13 @@ The project structure is as follows:
 
 ```shell
 .
+├── assets
+│   └── input
+│   └── output
+│   └── reference
 ├── conf
 │   └── custom.yaml
 ├── databases
-├── input
-├── output
-├── references
 ├── tools
 ├── LICENSE
 ├── miracum_pipe.sh
