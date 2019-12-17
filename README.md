@@ -65,12 +65,13 @@ The project structure is as follows:
 
 ```shell
 .
+├── assets
+│   └── input
+│   └── output
+│   └── references
 ├── conf
 │   └── custom.yaml
 ├── databases
-├── input
-├── output
-├── references
 ├── tools
 ├── LICENSE
 ├── miracum_pipe.sh
@@ -86,7 +87,7 @@ There are three levels of configuration:
 
 ### Setting up a patient
 
-It is intended to create a patient folder in `input` for each patient containing `patient.yaml`. Further, we recommend to define in it at least the following parameters:
+It is intended to create a patient folder in `assets/input` for each patient containing `patient.yaml`. Further, we recommend to define in it at least the following parameters:
 
 ```yaml
 sex: XX # or XY
