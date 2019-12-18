@@ -107,6 +107,28 @@ common:
     germline_R2: germline_R2.fastq.gz
 ```
 
+### Setting up the environment
+
+The `costum.yaml`is intended to add parameters specifying the local environment. This could encompass the resources available, i.e. number of cores and memory, the processing author as well as the reference genome and / or capture region files.
+Of course, all the settings could be set in the `patient.yaml`as well.
+
+```yaml
+common:
+  author: MIRACUM-Pipe
+  memory: 150g
+  cpucores: 12
+  
+reference:
+  genome: hg19.fa
+  length: hg19_chr.len
+  dbSNP: snp150hg19.vcf.gz
+  mappability: out100m2_hg19.gem
+  sequencing:
+    captureRegions: V5UTR.bed
+    captureGenes: V5UTR_Targets.txt
+    coveredRegion: 75
+```
+
 ### Run the pipeline
 
 There are multiple possibilities to run the pipeline:
