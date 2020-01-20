@@ -194,7 +194,7 @@ function install_databases() {
   wget https://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz.tbi -O "dbSNP/snp150hg19.vcf.gz.tbi"
 
   # CancerGenes
-  wget https://oncokb.org/api/v1/utils/cancerGeneList.txt -O CancerGenesList.txt
+  # wget https://oncokb.org/api/v1/utils/cancerGeneList.txt -O CancerGenesList.txt
   # https://github.com/oncokb/oncokb-public/blob/master/data/v1.15/CancerGenesList.txt
   
   # Cancer Hotspots
@@ -204,7 +204,7 @@ function install_databases() {
   wget http://www.dgidb.org/data/interactions.tsv -O DGIdb_interactions.tsv
 
   # Actionable alterations
-  wget https://oncokb.org/api/v1/utils/allActionableVariants.txt
+  # wget https://oncokb.org/api/v1/utils/allActionableVariants.txt
 
   echo "done"
 }

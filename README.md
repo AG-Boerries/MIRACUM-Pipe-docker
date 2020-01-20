@@ -6,7 +6,7 @@ This repo offers a framework to easily work with the dockerized version of [MIRA
 
 In order to run the miracum pipeline, one needs to setup tools and databases which we are not allowed to ship due to license issues.
 We prepared this project in a way which allows you to easily add the specific components into the pipeline.
-Prior running the setup script, some components need to be installed manually interaction:
+Prior running the setup script, some components need to be installed manually:
 
 - tools
   - [annovar](http://download.openbioinformatics.org/annovar_download_form.php)
@@ -17,6 +17,9 @@ Prior running the setup script, some components need to be installed manually in
   - [condel score](https://bbglab.irbbarcelona.org/fannsdb/)
     - fannsdb.tsv.gz
     - fannsdb.tsv.gz.tbi
+  - [OncoKB](https://www.oncokb.org)
+    - Actionalbe Genes, file: oncokb_biomarker_drug_associations.tsv
+    - Cancer Genes, file: cancerGeneList.tsv
 
 For running MIRACUM-Pipe the hallmark gene-sets, download link above, need to be formated as a list and stored in a RData file. Inside the `setup.sh` we provide a R script performing the necessary steps. Therefore, a working [R](https://cran.r-project.org/web/packages/GSA/index.html) togther with the R package [GSA](https://cran.r-project.org/web/packages/GSA/index.html) has to be installed.
 
