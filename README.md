@@ -118,6 +118,7 @@ Of course, all the settings could be set in the `patient.yaml`as well.
 ```yaml
 common:
   author: MIRACUM-Pipe
+  center: Freiburg
   memory: 150g
   cpucores: 12
   
