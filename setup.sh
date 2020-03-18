@@ -121,7 +121,7 @@ function install_tool_gatk() {
 
   echo "fetching gatk"
   # download new version
-  wget "https://software.broadinstitute.org/gatk/download/auth?package=GATK-archive&version=${version_GATK}" \
+  wget "https://storage.googleapis.com/gatk-software/package-archive/gatk/GenomeAnalysisTK-3.8-1-0-gf15c1c3ef.tar.bz2" \
       -O gatk.tar.bz2
 
   # unpack
