@@ -16,9 +16,10 @@ function usage() {
 
 PARAM_DOCKER_REPO_NAME="agboerries/miracum_pipe"
 
-while getopts t:d:v:n:fsrh option; do
+while getopts t:p:d:v:n:fsrh option; do
   case "${option}" in
   t) readonly PARAM_TASK=$OPTARG;;
+  p) readonly PARAM_PROTOCOL=$OPTARGS;;
   f) readonly PARAM_FORCED=true;;
   d) readonly PARAM_DIR_PATIENT=$OPTARG;;
   v) PIPELINE_VERSION=$OPTARG;;
@@ -56,6 +57,10 @@ fi
 
 if [[ "${PARAM_TASK}" ]]; then
   opt_args="${opt_args} -t ${PARAM_TASK}"
+fi
+
+if [[ "${PARAM_PROTOCOL}" ]]; then
+  opt_args="${opt_args} -p ${PARAM_TASK}"
 fi
 
 if [[ "${PARAM_SEQ}" ]]; then
