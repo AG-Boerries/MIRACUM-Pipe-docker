@@ -1,5 +1,9 @@
 # Changelog
 
+## Release v1.2.0
+
+* Added export of variants and copy number alterations for later import into cBioPortal
+
 ## Minor Release v1.0.1
 
 * Removed automatic OncoKB file download due to licence
