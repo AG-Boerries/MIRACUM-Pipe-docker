@@ -7,3 +7,11 @@ tools/annovar/*
 
 tools/gatk/*
 !tools/gatk/.gitkeep
+
+# databases
+databases/*
+!databases/.gitkeep
+
+# assets/input
+assets/input/*
+!assets/input/.gitkeep
