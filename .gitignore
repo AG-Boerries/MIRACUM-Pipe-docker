@@ -15,3 +15,10 @@ databases/*
 # assets/input
 assets/input/*
 !assets/input/.gitkeep
+
+# assets/references
+assets/references/*
+!assets/references/.gitkeep
+!assets/references/cnvkit/.gitkeep
+!assets/references/mappability/.gitkeep
+!assets/references/sequencing/.gitkeep
