@@ -19,7 +19,7 @@ PARAM_DOCKER_REPO_NAME="agboerries/miracum_pipe"
 while getopts t:p:d:v:n:fsrh option; do
   case "${option}" in
   t) readonly PARAM_TASK=$OPTARG;;
-  p) readonly PARAM_PROTOCOL=$OPTARGS;;
+  p) readonly PARAM_PROTOCOL=$OPTARG;;
   f) readonly PARAM_FORCED=true;;
   d) readonly PARAM_DIR_PATIENT=$OPTARG;;
   v) PIPELINE_VERSION=$OPTARG;;
@@ -60,7 +60,7 @@ if [[ "${PARAM_TASK}" ]]; then
 fi
 
 if [[ "${PARAM_PROTOCOL}" ]]; then
-  opt_args="${opt_args} -p ${PARAM_TASK}"
+  opt_args="${opt_args} -p ${PARAM_PROTOCOL}"
 fi
 
 if [[ "${PARAM_SEQ}" ]]; then
@@ -78,17 +78,7 @@ fi
 
 echo "running \"${DIR_MIRACUM}/miracum_pipe.sh ${opt_args}\" of docker miracumpipe:${PIPELINE_VERSION}"
 echo "---"
-#docker run -it --name run-miracum-pipeline --rm ${TMP_RAM} ${VOLUME_CONF} \
-#  -u $(id -u $USER) \
-#  -v "$(pwd)/assets/input:${DIR_MIRACUM}/assets/input" \
-#  -v "$(pwd)/assets/output:${DIR_MIRACUM}/assets/output" \
-#  -v "$(pwd)/assets/references:${DIR_MIRACUM}/assets/references" \
-#  -v "$(pwd)/tools/annovar:${DIR_MIRACUM}/tools/annovar" \
-#  -v "$(pwd)/tools/gatk:${DIR_MIRACUM}/tools/gatk" \
-#  -v "$(pwd)/databases:${DIR_MIRACUM}/databases" ${PARAM_DOCKER_REPO_NAME}:"${PIPELINE_VERSION}" "${DIR_MIRACUM}/miracum_pipe.sh" ${opt_args}
-
-# for running behind a proxy use this commad and fill in your proxy
-docker run -it --env http_proxy="http://proxy.ibsm.uni-freiburg.de:8080" --env https_proxy="http://proxy.ibsm.uni-freiburg.de:8080" --name run-miracum-pipeline --rm ${TMP_RAM} ${VOLUME_CONF} \
+docker run -it --name run-miracum-pipeline --rm ${TMP_RAM} ${VOLUME_CONF} \
   -u $(id -u $USER) \
   -v "$(pwd)/assets/input:${DIR_MIRACUM}/assets/input" \
   -v "$(pwd)/assets/output:${DIR_MIRACUM}/assets/output" \
@@ -96,3 +86,13 @@ docker run -it --env http_proxy="http://proxy.ibsm.uni-freiburg.de:8080" --env h
   -v "$(pwd)/tools/annovar:${DIR_MIRACUM}/tools/annovar" \
   -v "$(pwd)/tools/gatk:${DIR_MIRACUM}/tools/gatk" \
   -v "$(pwd)/databases:${DIR_MIRACUM}/databases" ${PARAM_DOCKER_REPO_NAME}:"${PIPELINE_VERSION}" "${DIR_MIRACUM}/miracum_pipe.sh" ${opt_args}
+
+# for running behind a proxy use this commad and fill in your proxy
+#docker run -it --env http_proxy="http://proxy.ibsm.uni-freiburg.de:8080" --env https_proxy="http://proxy.ibsm.uni-freiburg.de:8080" --name run-miracum-pipeline --rm ${TMP_RAM} ${VOLUME_CONF} \
+#  -u $(id -u $USER) \
+#  -v "$(pwd)/assets/input:${DIR_MIRACUM}/assets/input" \
+#  -v "$(pwd)/assets/output:${DIR_MIRACUM}/assets/output" \
+#  -v "$(pwd)/assets/references:${DIR_MIRACUM}/assets/references" \
+#  -v "$(pwd)/tools/annovar:${DIR_MIRACUM}/tools/annovar" \
+#  -v "$(pwd)/tools/gatk:${DIR_MIRACUM}/tools/gatk" \
+#  -v "$(pwd)/databases:${DIR_MIRACUM}/databases" ${PARAM_DOCKER_REPO_NAME}:"${PIPELINE_VERSION}" "${DIR_MIRACUM}/miracum_pipe.sh" ${opt_args}
