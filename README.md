@@ -1,8 +1,8 @@
-# MIRACUM-Pipe-docker
+# 1. MIRACUM-Pipe-docker
 
 This repo offers a framework to easily work with the dockerized version of [MIRACUM-Pipe](https://github.com/AG-Boerries/MIRACUM-Pipe)
 
-## Setup and installation
+## 1.1. Setup and installation
 
 In order to run the miracum pipeline, one needs to setup tools and databases which we are not allowed to ship due to license issues.
 We prepared this project in a way which allows you to easily add the specific components into the pipeline.
@@ -27,7 +27,7 @@ For the tool annovar you need the download link. Follow the url above and reques
 While `setup.sh` is running you'll be asked to enter this download link. Alternatively you could also install annovar by manually extracting it into the folder `tools`.
 To install the databases install follow the link, register and download the listed files. Just place them into the folder `databases` of your cloned project.
 
-Next, run the setup script. We recommend to install everything, which dows **not** include the example and reference data. There are also options to install and setup parts:
+Next, run the setup script. We recommend to install everything, which does **not** include the example and reference data. There are also options to install and setup parts:
 
 ```bash
 ./setup.sh -t all
@@ -62,7 +62,7 @@ See `setup.sh -h` to list the available options. By default, we do not install t
 
   - Move both created files to the annovar/humandb folder.
 
-## How to configure and run it
+## 1.2. How to configure and run it
 
 The project structure is as follows:
 
@@ -88,7 +88,7 @@ There are three levels of configuration:
 - `conf/custom.yaml` contains settings for the entire runtime environment and overwrites `default.yaml`'s values
 - In each patient directory one a `patient.yaml` can be created in which every setting of the other two configs can be overwritten.
 
-### Setting up a patient
+### 1.2.1. Setting up a patient
 
 It is intended to create a patient folder in `input` for each patient containing `patient.yaml`. Further, we recommend to define in it at least the following parameters:
 
@@ -110,7 +110,7 @@ common:
     germline_R2: germline_R2.fastq.gz
 ```
 
-### Setting up the environment
+### 1.2.2. Setting up the environment
 
 The `costum.yaml`is intended to add parameters specifying the local environment. This could encompass the resources available, i.e. number of cores and memory, the processing author as well as the reference genome and / or capture region files.
 Of course, all the settings could be set in the `patient.yaml`as well.
@@ -133,7 +133,7 @@ reference:
     coveredRegion: 75
 ```
 
-### Run the pipeline
+### 1.2.3. Run the pipeline
 
 There are multiple possibilities to run the pipeline:
 
@@ -161,7 +161,7 @@ For more information see at the help of the command by running:
 ./miracum_pipe.sh
 ```
 
-### Parallel computation
+### 1.2.4. Parallel computation
 
 The MIRACUM-Pipe consits of five major steps (tasks) of which several can be computed in parallel:
 
@@ -172,20 +172,20 @@ The MIRACUM-Pipe consits of five major steps (tasks) of which several can be com
 After the pipeline finishes successfully, it creates the file `.processed` into the patient's direcotry. Per default processed patients are skipped.
 The flag `-f` forces a recomputation and neglects that file. Furhtermore, sometimes it is required to rerun a single task. Therefore, use the flag `-t`.
 
-## Logging
+## 1.3. Logging
 
 MIRACUM-pipe writes its logfiles into `output/<patient_name>/log`. For each task in the pipeline an own logfile is created. With the help of these logfiles one can monitor the current status of the pipeline process.
 
-## Parallell & sequential computing
+## 1.4. Parallell & sequential computing
 
 In `conf/custom.yaml` one can setup ressource parameters as cpucores and memory. If not intentionally called the pipeline on as single thread (sequentially), several tasks compute in parallel. The ressources are divided, thus you can enter the real 100% ressource you want to offer the entire pipline processes. Single threaded is intended to be used in case of limited hardware ressources or very large input files.
 
 **BEWARE**: if you set tmp to be a tempfs (into ram), please consider this, while deciding the process ressources.
 
-## Run the docker image behind a proxy
+## 1.5. Run the docker image behind a proxy
 
 If you need a proxy to connect to the internet you need to change the command running the docker. We provided the needed parameters in the docker run command. You only need to uncomment the lines 86-93 in [miracum_pipe.sh](https://github.com/AG-Boerries/MIRACUM-Pipe-docker/blob/master/miracum_pipe.sh), add the proxy server address and port and comment or delete the lines 76-83.
 
-## License
+## 1.6. License
 
 This work is licensed under [GNU Affero General Public License version 3](https://opensource.org/licenses/AGPL-3.0).
