@@ -25,7 +25,7 @@ For running MIRACUM-Pipe the hallmark gene-sets, download link above, need to be
 
 For the tool annovar you need the download link. Follow the url above and request the link by filling out the form. They will send you an email.
 While `setup.sh` is running you'll be asked to enter this download link. Alternatively you could also install annovar by manually extracting it into the folder `tools`.
-To install the databases install follow the link, register and download the listed files. Just place them into the folder `databases` of your cloned project.
+To install the databases follow the links, register and download the listed files. Just place them into the folder `databases` of your cloned project.
 
 Next, run the setup script. We recommend to install everything, which does **not** include the example and reference data. There are also options to install and setup parts:
 
@@ -95,10 +95,13 @@ It is intended to create a patient folder in `input` for each patient containing
 ```yaml
 sex: XX # or XY
 annotation:
-  germline: yes # default is no
+  germline: yes # default is no; annotation of germline findings
+protocol: wes # possible values are either wes for whole exome sequencing, requires a tumor and matched germline sample, or panel for tNGS, only the tumor samples is necessary.
 ```
 
-Place the germline R1 and R2 files as well as the tumor files (R1 and R2) into the folder. Either name them `germline_R{1/2}.fastqz.gz` and `tumor_R{1/2}.fastq.gz` or adjust your `patient.yaml` accordingly:
+#### 1.2.1.1 Example for whole-exome sequencing; protocol parameter: wes
+
+Place the germline R1 and R2 files as well as the tumor files (R1 and R2) into the *input* folder. Either name them `germline_R{1/2}.fastqz.gz` and `tumor_R{1/2}.fastq.gz` or adjust your `patient.yaml` accordingly:
 
 ```yaml
 [..]
@@ -108,6 +111,29 @@ common:
     tumor_R2: tumor_R2.fastq.gz
     germline_R1: germline_R1.fastq.gz
     germline_R2: germline_R2.fastq.gz
+  protocol: wes
+```
+
+#### 1.2.1.2 Example for tNGS; protocol paramter: panel
+
+Place the tumor files (R1 and R2) into the *input* folder. Adjust your `patient.yaml` accordingly:
+
+```yaml
+[..]
+common:
+  files:
+    tumor_R1: tumor_R1.fastq.gz
+    tumor_R2: tumor_R2.fastq.gz
+  protocol: panel
+```
+
+Additionally, a flatReference, i.e. a control, file has to be supplied for cnvkit to identify CNVs. The file has to be constructed according to the used capture kit/sequencing kit. Building the file is described on the developer homepage [cnvkit](https://cnvkit.readthedocs.io/en/stable/pipeline.html#with-no-control-samples). For each sequencing kit respectively panel, the flatReference file has to be constructed only once and it can be re-used for all panels of the same kind.
+
+```yaml
+[..]
+tools:
+  cnvkit:
+    flatReference: FlatReference_TruSight_Tumor.cnn
 ```
 
 ### 1.2.2. Setting up the environment
@@ -128,31 +154,70 @@ reference:
   dbSNP: snp150hg19.vcf.gz
   mappability: out100m2_hg19.gem
   sequencing:
+    # target region covered by the sequencer in .bed format
     captureRegions: V5UTR.bed
+    # file containing all the covered genes as HUGO Symbols
     captureGenes: V5UTR_Targets.txt
+    # target region in Mega bases covered
     coveredRegion: 75
+    # target / capture region kit name
+    captureRegionName: V5UTR
+    # target capture correlation factors for mutation signature analysis
+    captureCorFactors : targetCapture_cor_factors.rda
 ```
 
 ### 1.2.3. Run the pipeline
 
 There are multiple possibilities to run the pipeline:
 
+#### 1.2.3.1 Whole-exome sequencing
+
+Assumption: Patient folder name *Patient_example* within the *input* folder under assets/input.
+
 - run complete pipeline on one patient
   
   ```bash
-  ./miracum_pipe.sh -d rel_patient_folder
+  ./miracum_pipe.sh -p wes -d Patient_example
   ```
 
-- run a specific task on a given patient
+- run a specific task on a given patient; possible tasks *td* (tumor sample alignment), *gd* (germline sample alignment), *td_gd_parallel* (td and gd in parallel), *vc* (variant calling), *cnv* (copy number calling), *vc_cnv_parallel* (vc and cnv parallel), *report* (report generation)
   
   ```bash
-  ./miracum_pipe.sh -d rel_patient_folder -t task
+  ./miracum_pipe.sh -p wes -d Patient_example -t task
   ```
 
 - run all unprocessed (no .processed file in the dir) patients
   
   ```bash
-  ./miracum_pipe.sh
+  ./miracum_pipe.sh -p wes
+  ```
+
+For more information see at the help of the command by running:
+
+```bash
+./miracum_pipe.sh
+```
+
+#### 1.2.3.2 tNGS
+
+Assumption: Patient folder name *TST170_example* within the *input* folder under assets/input.
+
+- run complete pipeline on one patient
+  
+  ```bash
+  ./miracum_pipe.sh -p panel -d TST170_example
+  ```
+
+- run a specific task on a given patient; possible tasks *td* (tumor sample alignment), *vc* (variant calling), *cnv* (copy number calling), *vc_cnv_parallel* (vc and cnv in parallel) *report* (report generation)
+  
+  ```bash
+  ./miracum_pipe.sh -p panel -d TST170_example -t task
+  ```
+
+- run all unprocessed (no .processed file in the dir) patients
+  
+  ```bash
+  ./miracum_pipe.sh -p panel
   ```
 
 For more information see at the help of the command by running:
@@ -186,6 +251,25 @@ In `conf/custom.yaml` one can setup ressource parameters as cpucores and memory.
 
 If you need a proxy to connect to the internet you need to change the command running the docker. We provided the needed parameters in the docker run command. You only need to uncomment the lines 86-93 in [miracum_pipe.sh](https://github.com/AG-Boerries/MIRACUM-Pipe-docker/blob/master/miracum_pipe.sh), add the proxy server address and port and comment or delete the lines 76-83.
 
-## 1.6. License
+## 1.6 Limitations
+
+MIRACUM-Pipe is currently test for the whole-exome protocol for the capture kits V5UTR and V6. The tool used for mutation signature analysis is currently only compatible with the following kits:
+
+- Agilent4withUTRs
+- Agilent4withoutUTRs
+- Agilent5withUTRs
+- Agilent5withoutUTRs
+- SomSig
+- hs37d5
+- IlluminaNexteraExome
+- Agilent6withoutUTRs
+- Agilent6withUTRs
+- Agilent7withoutUTRs
+
+The name of the kit has to be supplied with the *captureRegionName* parameter. We introduced abbreviations for Agilent6withoutUTRs (V6), Agilent6withUTRs (V6UTR) and Agilent5withUTRs (V5UTR) which could be used.
+
+For the tNGS protocol MIRACUM-Pipe is tested for the Illumina TruSight Tumor 170 panel.
+
+## 1.7. License
 
 This work is licensed under [GNU Affero General Public License version 3](https://opensource.org/licenses/AGPL-3.0).

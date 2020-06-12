@@ -171,7 +171,7 @@ function setup_tool_annovar() {
   # Download proposed databases directly from ANNOVAR
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb/
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp35a humandb/
-  # TODO only take gnomAD_genome
+  # only take gnomAD_genome
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad211_genome humandb/ # version 2.1.1
   #./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad_exome humandb/
   #./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar exac03 humandb/
