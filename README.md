@@ -1,12 +1,12 @@
-# 1. MIRACUM-Pipe-docker
+# MIRACUM-Pipe-docker
 
 This repo offers a framework to easily work with the dockerized version of [MIRACUM-Pipe](https://github.com/AG-Boerries/MIRACUM-Pipe)
 
-## 1.0. Disclaimer
+## Disclaimer
 
 MIRACUM-Pipe is intended for research use only!
 
-## 1.1. Setup and installation
+## Setup and installation
 
 In order to run the miracum pipeline, one needs to setup tools and databases which we are not allowed to ship due to license issues.
 We prepared this project in a way which allows you to easily add the specific components into the pipeline.
@@ -66,7 +66,7 @@ See `setup.sh -h` to list the available options. By default, we do not install t
 
   - Move both created files to the annovar/humandb folder.
 
-## 1.2. How to configure and run it
+## How to configure and run it
 
 The project structure is as follows:
 
@@ -92,7 +92,7 @@ There are three levels of configuration:
 - `conf/custom.yaml` contains settings for the entire runtime environment and overwrites `default.yaml`'s values
 - In each patient directory one a `patient.yaml` can be created in which every setting of the other two configs can be overwritten.
 
-### 1.2.1. Setting up a patient
+### Setting up a patient
 
 It is intended to create a patient folder in `input` for each patient containing `patient.yaml`. Further, we recommend to define in it at least the following parameters:
 
@@ -103,7 +103,7 @@ annotation:
 protocol: wes # possible values are either wes for whole exome sequencing, requires a tumor and matched germline sample, or panel for tNGS, only the tumor samples is necessary.
 ```
 
-#### 1.2.1.1 Example for whole-exome sequencing; protocol parameter: wes
+#### Example for whole-exome sequencing; protocol parameter: wes
 
 Place the germline R1 and R2 files as well as the tumor files (R1 and R2) into the *input* folder. Either name them `germline_R{1/2}.fastqz.gz` and `tumor_R{1/2}.fastq.gz` or adjust your `patient.yaml` accordingly:
 
@@ -118,7 +118,7 @@ common:
   protocol: wes
 ```
 
-#### 1.2.1.2 Example for tNGS; protocol paramter: panel
+#### Example for tNGS; protocol paramter: panel
 
 Place the tumor files (R1 and R2) into the *input* folder. Adjust your `patient.yaml` accordingly:
 
@@ -140,7 +140,7 @@ tools:
     flatReference: FlatReference_TruSight_Tumor.cnn
 ```
 
-### 1.2.2. Setting up the environment
+### Setting up the environment
 
 The `costum.yaml`is intended to add parameters specifying the local environment. This could encompass the resources available, i.e. number of cores and memory, the processing author as well as the reference genome and / or capture region files.
 Of course, all the settings could be set in the `patient.yaml`as well.
@@ -170,11 +170,11 @@ reference:
     captureCorFactors : targetCapture_cor_factors.rda
 ```
 
-### 1.2.3. Run the pipeline
+### Run the pipeline
 
 There are multiple possibilities to run the pipeline:
 
-#### 1.2.3.1 Whole-exome sequencing
+#### Whole-exome sequencing
 
 Assumption: Patient folder name *Patient_example* within the *input* folder under assets/input.
 
@@ -202,7 +202,7 @@ For more information see at the help of the command by running:
 ./miracum_pipe.sh
 ```
 
-#### 1.2.3.2 tNGS
+#### tNGS
 
 Assumption: Patient folder name *TST170_example* within the *input* folder under assets/input.
 
@@ -230,7 +230,7 @@ For more information see at the help of the command by running:
 ./miracum_pipe.sh
 ```
 
-### 1.2.4. Parallel computation
+### Parallel computation
 
 The MIRACUM-Pipe consits of five major steps (tasks) of which several can be computed in parallel:
 
@@ -241,21 +241,21 @@ The MIRACUM-Pipe consits of five major steps (tasks) of which several can be com
 After the pipeline finishes successfully, it creates the file `.processed` into the patient's direcotry. Per default processed patients are skipped.
 The flag `-f` forces a recomputation and neglects that file. Furhtermore, sometimes it is required to rerun a single task. Therefore, use the flag `-t`.
 
-## 1.3. Logging
+## Logging
 
 MIRACUM-pipe writes its logfiles into `output/<patient_name>/log`. For each task in the pipeline an own logfile is created. With the help of these logfiles one can monitor the current status of the pipeline process.
 
-## 1.4. Parallell & sequential computing
+## Parallell & sequential computing
 
 In `conf/custom.yaml` one can setup ressource parameters as cpucores and memory. If not intentionally called the pipeline on as single thread (sequentially), several tasks compute in parallel. The ressources are divided, thus you can enter the real 100% ressource you want to offer the entire pipline processes. Single threaded is intended to be used in case of limited hardware ressources or very large input files.
 
 **BEWARE**: if you set tmp to be a tempfs (into ram), please consider this, while deciding the process ressources.
 
-## 1.5. Run the docker image behind a proxy
+## Run the docker image behind a proxy
 
 If you need a proxy to connect to the internet you need to change the command running the docker. We provided the needed parameters in the docker run command. You only need to uncomment the lines 86-93 in [miracum_pipe.sh](https://github.com/AG-Boerries/MIRACUM-Pipe-docker/blob/master/miracum_pipe.sh), add the proxy server address and port and comment or delete the lines 76-83.
 
-## 1.6 Limitations
+## Limitations
 
 MIRACUM-Pipe is currently test for the whole-exome protocol for the capture kits V5UTR and V6. The tool used for mutation signature analysis is currently only compatible with the following kits:
 
@@ -274,6 +274,6 @@ The name of the kit has to be supplied with the *captureRegionName* parameter. W
 
 For the tNGS protocol MIRACUM-Pipe is tested for the Illumina TruSight Tumor 170 panel.
 
-## 1.7. License
+## License
 
 This work is licensed under [GNU Affero General Public License version 3](https://opensource.org/licenses/AGPL-3.0).
