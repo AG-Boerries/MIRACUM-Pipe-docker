@@ -2,6 +2,10 @@
 
 This repo offers a framework to easily work with the dockerized version of [MIRACUM-Pipe](https://github.com/AG-Boerries/MIRACUM-Pipe)
 
+## 1.0. Disclaimer
+
+MIRACUM-Pipe is intended for research use only!
+
 ## 1.1. Setup and installation
 
 In order to run the miracum pipeline, one needs to setup tools and databases which we are not allowed to ship due to license issues.
