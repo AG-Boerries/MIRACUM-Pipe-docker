@@ -15,6 +15,7 @@ function usage() {
 }
 
 PARAM_DOCKER_REPO_NAME="agboerries/miracum_pipe"
+readonly VALID_PROTOCOLS=("wes panel")
 
 while getopts t:p:d:v:n:fsrh option; do
   case "${option}" in
@@ -44,6 +45,17 @@ done
 
 [[ -z "${PIPELINE_VERSION}" ]] && PIPELINE_VERSION='latest'
 [[ "${SHOW_USAGE}" ]] && usage "${PARAM_DOCKER_REPO_NAME}" "${PIPELINE_VERSION}"
+
+if [[ ! -z "${PARAM_PROTOCOL}" ]]; then
+  if [[ ! " ${VALID_PROTOCOLS[@]} " =~ " ${PARAM_PROTOCOL} " ]]; then
+    echo "unknown protocol: ${PARAM_PROTOCOL}"
+    echo "use one of the following values: $(join_by ' ' ${VALID_PROTOCOLS})"
+    exit 1
+  fi
+elif [[ -z "${PARAM_PROTOCOL}" ]]; then
+  echo "no protocol specified!"
+  exit 1
+fi
 
 # conf as volume
 if [[ -d $(pwd)/conf ]]; then
