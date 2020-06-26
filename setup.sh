@@ -225,7 +225,7 @@ function setup_databases() {
   ## R Code for processing
   ${BIN_RSCRIPT} --vanilla geneset_generation.R
 
-  rm -f h.all.v7.0.entrez.gmt
+  rm -f h.all.v7.1.entrez.gmt
 
   echo "done"
 }
