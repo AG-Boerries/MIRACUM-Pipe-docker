@@ -17,7 +17,7 @@ Prior running the setup script, some components need to be installed manually:
 
 - databases
   - [hallmark gene-sets](http://software.broadinstitute.org/gsea/msigdb/)
-    - h.all.v7.0.entrez.gmt
+    - h.all.v7.1.entrez.gmt, (any other version should work as well if the filename is adjusted in [geneset_generation.R](https://github.com/AG-Boerries/MIRACUM-Pipe-docker/blob/master/databases/geneset_generation.R) in line 2
   - [condel score](https://bbglab.irbbarcelona.org/fannsdb/)
     - fannsdb.tsv.gz
     - fannsdb.tsv.gz.tbi
