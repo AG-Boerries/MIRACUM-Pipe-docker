@@ -17,7 +17,7 @@ Prior running the setup script, some components need to be installed manually:
 
 - databases
   - [hallmark gene-sets](http://software.broadinstitute.org/gsea/msigdb/)
-    - h.all.v7.0.entrez.gmt
+    - h.all.vX.X.entrez.gmt (current release is v7.1 (June 2020))
   - [condel score](https://bbglab.irbbarcelona.org/fannsdb/)
     - fannsdb.tsv.gz
     - fannsdb.tsv.gz.tbi
@@ -51,7 +51,7 @@ See `setup.sh -h` to list the available options. By default, we do not install t
   - create a database for the latest COSMIC release (according to the [annovar manual](http://annovar.openbioinformatics.org/en/latest/user-guide/filter/#cosmic-annotations))
     - Download [prepare_annovar_user.pl](http://www.openbioinformatics.org/annovar/download/prepare_annovar_user.pl) and add to annovar folder
   - register at [COSMIC](https://cancer.sanger.ac.uk/cosmic);
-    - Download the latest release for GRCh37 (as of October 2019 the latest release is v90):
+    - Download the latest release for GRCh37 (as of June 2020 the latest release is v91):
       - VCF/CosmicCodingMuts.vcf.gz
       - VCF/CosmicNonCodingVariants.vcf.gz
       - CosmicMutantExport.tsv.gz
