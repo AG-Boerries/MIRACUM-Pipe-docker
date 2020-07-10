@@ -13,13 +13,15 @@ function usage() {
   echo "usage: setup -t task"
   echo "  -t  task            specify task: $(join_by ' ' ${VALID_TASKS})"
   echo "  -h                  show this help screen"
+  echo "  -m  file            MSigDB hallmarks gene-set h.all.vX.X.entrez.gmt file"
   exit 1
 }
 
-while getopts d:t:ph option; do
+while getopts d:t:m:ph option; do
   case "${option}" in
   d) readonly PARAM_DIR_PATIENT=$OPTARG ;;
   t) PARAM_TASK=$OPTARG ;;
+  m) readonly HALLMARKS=$OPTARG ;;
   h) usage ;;
   \?)
     echo "Unknown option: -$OPTARG" >&2
@@ -214,6 +216,12 @@ function install_databases() {
 function setup_databases() {
   echo "setup databases"
 
+  if [[ -z "${HALLMARKS}" ]]; then
+    echo "no hallmarks file provided! Please provide the h.all.vX.X.entrez.gmt file from MSigDB."
+    exit 1
+  fi
+  echo "${HALLMARK}"
+
   cd "${DIR_DATABASES}" || exit 1
 
   BIN_RSCRIPT=$(which Rscript)
@@ -223,9 +231,9 @@ function setup_databases() {
   fi
 
   ## R Code for processing
-  ${BIN_RSCRIPT} --vanilla geneset_generation.R
+  ${BIN_RSCRIPT} --vanilla geneset_generation.R "${HALLMARKS}"
 
-  rm -f h.all.v7.1.entrez.gmt
+  #rm -f "${HALLMARKS}"
 
   echo "done"
 }
