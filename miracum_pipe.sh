@@ -15,7 +15,7 @@ function usage() {
 }
 
 PARAM_DOCKER_REPO_NAME="agboerries/miracum_pipe"
-readonly VALID_PROTOCOLS=("wes panel")
+readonly VALID_PROTOCOLS=("wes panel tumorOnly")
 
 while getopts t:p:d:v:n:fsrh option; do
   case "${option}" in
