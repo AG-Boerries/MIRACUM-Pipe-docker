@@ -100,7 +100,7 @@ It is intended to create a patient folder in `input` for each patient containing
 sex: XX # or XY
 annotation:
   germline: yes # default is no; annotation of germline findings
-protocol: wes # possible values are either wes for whole exome sequencing, requires a tumor and matched germline sample, or panel for tNGS, only the tumor samples is necessary.
+protocol: wes # possible values are either wes for whole exome sequencing, requires a tumor and matched germline sample, panel for tNGS or tumorOnly for tumor only analysis, only the tumor samples is necessary.
 ```
 
 #### Example for whole-exome sequencing; protocol parameter: wes
@@ -138,6 +138,19 @@ Additionally, a flatReference, i.e. a control, file has to be supplied for cnvki
 tools:
   cnvkit:
     flatReference: FlatReference_TruSight_Tumor.cnn
+```
+
+#### Example for tumor only analysis; protocol parameter: tumorOnly
+
+Place the tumor files (R1 and R2) into the *input* folder. Adjust your `patient.yaml` accordingly:
+
+```yaml
+[..]
+common:
+  files:
+    tumor_R1: tumor_R1.fastq.gz
+    tumor_R2: tumor_R2.fastq.gz
+  protocol: tumorOnly
 ```
 
 ### Setting up the environment
