@@ -202,7 +202,7 @@ function install_databases() {
   wget http://www.cancerhotspots.org/files/hotspots_v2.xls
 
   # DGIdb
-  wget http://www.dgidb.org/data/interactions.tsv -O DGIdb_interactions.tsv
+  wget https://www.dgidb.org/data/monthly_tsvs/2020-Oct/interactions.tsv -O DGIdb_interactions.tsv
 
   # Actionable alterations
   # wget https://oncokb.org/api/v1/utils/allActionableVariants.txt
