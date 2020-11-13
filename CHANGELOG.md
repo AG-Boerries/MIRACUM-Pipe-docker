@@ -1,5 +1,9 @@
 # Changelog
 
+## Minor Updates
+
+* Update of several annovar databases; re-start of ./setup.sh -t setup_tools recommended.
+
 ## Release v3.0.0
 
 * Interation of a "tumorOnly" Pipeline
