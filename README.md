@@ -243,6 +243,34 @@ For more information see at the help of the command by running:
 ./miracum_pipe.sh
 ```
 
+#### tumorOnly
+
+Assumption: Patient folder name *Patient_example* within the *input* folder under assets/input.
+
+- run complete pipeline on one patient
+  
+  ```bash
+  ./miracum_pipe.sh -p tumorOnly -d Patient_example
+  ```
+
+- run a specific task on a given patient; possible tasks *td* (tumor sample alignment), *vc* (variant calling), *cnv* (copy number calling), *vc_cnv_parallel* (vc and cnv in parallel) *report* (report generation)
+  
+  ```bash
+  ./miracum_pipe.sh -p tumorOnly -d Patient_example -t task
+  ```
+
+- run all unprocessed (no .processed file in the dir) patients
+  
+  ```bash
+  ./miracum_pipe.sh -p tumorOnly
+  ```
+
+For more information see at the help of the command by running:
+
+```bash
+./miracum_pipe.sh
+```
+
 ### Parallel computation
 
 The MIRACUM-Pipe consits of five major steps (tasks) of which several can be computed in parallel:
