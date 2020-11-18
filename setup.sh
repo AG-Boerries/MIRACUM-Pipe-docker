@@ -13,7 +13,7 @@ function usage() {
   echo "usage: setup -t task"
   echo "  -t  task            specify task: $(join_by ' ' ${VALID_TASKS})"
   echo "  -h                  show this help screen"
-  echo "  -m  file            MSigDB hallmarks gene-set h.all.vX.X.entrez.gmt file"
+  echo "  -m  file            Path to including filename of MSigDB hallmarks gene-set h.all.vX.X.entrez.gmt file"
   exit 1
 }
 
@@ -192,19 +192,12 @@ function install_databases() {
   # dbSNP
   wget https://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz -O "dbSNP/snp150hg19.vcf.gz"
   wget https://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b150_GRCh37p13/VCF/All_20170710.vcf.gz.tbi -O "dbSNP/snp150hg19.vcf.gz.tbi"
-
-  # CancerGenes
-  # wget https://oncokb.org/api/v1/utils/cancerGeneList.txt -O CancerGenesList.txt
-  # https://github.com/oncokb/oncokb-public/blob/master/data/v1.15/CancerGenesList.txt
-  
+ 
   # Cancer Hotspots
   wget http://www.cancerhotspots.org/files/hotspots_v2.xls
 
   # DGIdb
   wget https://www.dgidb.org/data/monthly_tsvs/2020-Oct/interactions.tsv -O DGIdb_interactions.tsv
-
-  # Actionable alterations
-  # wget https://oncokb.org/api/v1/utils/allActionableVariants.txt
 
   echo "done"
 }
@@ -228,8 +221,6 @@ function setup_databases() {
 
   ## R Code for processing
   ${BIN_RSCRIPT} --vanilla geneset_generation.R "${HALLMARKS}"
-
-  #rm -f "${HALLMARKS}"
 
   echo "done"
 }

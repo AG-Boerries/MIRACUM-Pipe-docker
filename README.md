@@ -34,7 +34,7 @@ To install the databases follow the links, register and download the listed file
 Next, run the setup script. We recommend to install everything, which does **not** include the example and reference data. There are also options to install and setup parts:
 
 ```bash
-./setup.sh -t all -m h.all.v.7.1.entrez.gmt
+./setup.sh -t all -m /path/to/h.all.v.7.1.entrez.gmt
 ```
 
 See `setup.sh -h` to list the available options. By default, we do not install the reference genome as well as our example. If you want to install it run
