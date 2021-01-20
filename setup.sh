@@ -260,6 +260,10 @@ case "${PARAM_TASK}" in
     setup_tool_annovar
   ;;
 
+  "fusioncatcherdb")
+    setup_tool_fusioncatcher
+  ;;
+
   "ref")
     setup_references
   ;;
