@@ -182,6 +182,23 @@ function setup_tool_annovar() {
   echo "done"
 }
 
+function setup_tool_fusioncatcher() {
+  echo "setup tool fusioncatcher"
+  echo "download database"
+
+  mkdir -p "${DIR_TOOLS}/fusioncatcher/data"
+  cd "${DIR_TOOLS}/fusioncatcher/data" || exit 1
+  wget http://sourceforge.net/projects/fusioncatcher/files/data/human_v102.tar.gz.aa
+  wget http://sourceforge.net/projects/fusioncatcher/files/data/human_v102.tar.gz.ab
+  wget http://sourceforge.net/projects/fusioncatcher/files/data/human_v102.tar.gz.ac
+  wget http://sourceforge.net/projects/fusioncatcher/files/data/human_v102.tar.gz.ad
+  cat human_v102.tar.gz.* | tar xz
+  ln -s human_v102 current
+
+  rm -f human_v102.tar.gz
+  echo "done"
+}
+
 # databases
 ######################################################################################
 function install_databases() {
