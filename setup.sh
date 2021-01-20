@@ -216,6 +216,9 @@ function install_databases() {
   # DGIdb
   wget https://www.dgidb.org/data/monthly_tsvs/2020-Oct/interactions.tsv -O DGIdb_interactions.tsv
 
+  # MSIseq db
+  wget http://steverozen.net/data/Hg19repeats.rda
+
   echo "done"
 }
 
