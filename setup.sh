@@ -196,6 +196,10 @@ function setup_tool_fusioncatcher() {
   ln -s human_v102 current
 
   rm -f human_v102.tar.gz
+  rm -f human_v102.tar.gz.aa
+  rm -f human_v102.tar.gz.ab
+  rm -f human_v102.tar.gz.ac
+  rm -f human_v102.tar.gz.ad
   echo "done"
 }
 
