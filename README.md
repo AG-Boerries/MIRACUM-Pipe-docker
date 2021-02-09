@@ -296,6 +296,23 @@ In `conf/custom.yaml` one can setup ressource parameters as cpucores and memory.
 
 If you need a proxy to connect to the internet you need to change the command running the docker. We provided the needed parameters in the docker run command. You only need to uncomment the lines 86-93 in [miracum_pipe.sh](https://github.com/AG-Boerries/MIRACUM-Pipe-docker/blob/master/miracum_pipe.sh), add the proxy server address and port and comment or delete the lines 76-83.
 
+## Used annotation databases
+
+The following annotation databases are used during runtime of MIRACUM-Pipe. The default set could be easily extended.
+
+- refGene
+- dbNSFP v4.1a
+- gnomAD v2.1.1 (Genome)
+- dbSNP
+- ClinVar
+- InterVar
+- COSMIC v91
+- OncoKB
+  - Actionalbe Genes
+  - Cancer Genes
+- FANNSDB (Condel)
+- TARGET DB
+
 ## Limitations
 
 MIRACUM-Pipe is currently test for the whole-exome protocol for the capture kits V5UTR and V6. The tool used for mutation signature analysis is currently only compatible with the following kits:
