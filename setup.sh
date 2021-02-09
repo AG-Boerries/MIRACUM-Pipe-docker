@@ -176,7 +176,7 @@ function setup_tool_annovar() {
   # only take gnomAD_genome
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad211_genome humandb/ # version 2.1.1
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar avsnp150 humandb/
-  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar clinvar_20200316 humandb/
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar clinvar_20210123 humandb/
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar intervar_20180118 humandb/
 
   echo "done"

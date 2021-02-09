@@ -1,5 +1,12 @@
 # Changelog
 
+## Release v3.1.0
+
+* Updated ClinVar version to clinvar_20210123
+* Introduced duplicate removal for panel pipeline
+* Implemented advanced qc and coverage metrics
+* Included RNA Fusion detection for panels containing RNA data
+
 ## Minor Updates
 
 * Update of several annovar databases; re-start of ./setup.sh -t setup_tools recommended.
