@@ -137,7 +137,28 @@ function install_tool_gatk() {
   echo "done"
 }
 
+#########
+# GATK4 #
+#########
+function install_tool_gatk4() {
+  echo "installing tool gatk4"
+  cd "${DIR_TOOLS}" || exit 1
 
+  echo "fetching gatk"
+  # download new version
+  wget "https://github.com/broadinstitute/gatk/releases/download/4.2.0.0/gatk-4.2.0.0.zip" \
+      -O gatk4.zip
+
+  # unpack
+  unzip -o gatk4.zip
+  rm -f gatk4.zip
+
+  # rename folder and file (neglect version information)
+  mv gatk-4*/* gatk4/
+  rm -rf gatk-4*
+
+  echo "done"
+}
 
 ###########
 # annovar #
@@ -259,6 +280,7 @@ function setup_databases() {
 case "${PARAM_TASK}" in
   "tools_install") 
     install_tool_gatk
+    install_tool_gatk4
     install_tool_annovar
   ;;
 
@@ -288,6 +310,7 @@ case "${PARAM_TASK}" in
 
   *) 
     install_tool_gatk
+    install_tool_gatk4
     install_tool_annovar
     setup_tool_annovar
 
