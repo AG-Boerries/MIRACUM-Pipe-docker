@@ -97,6 +97,7 @@ docker run -it --name run-miracum-pipeline --rm ${TMP_RAM} ${VOLUME_CONF} \
   -v "$(pwd)/assets/references:${DIR_MIRACUM}/assets/references" \
   -v "$(pwd)/tools/annovar:${DIR_MIRACUM}/tools/annovar" \
   -v "$(pwd)/tools/gatk:${DIR_MIRACUM}/tools/gatk" \
+  -v "$(pwd)/tools/fusioncatcher/data:${DIR_MIRACUM}/tools/fusioncatcher/data" \
   -v "$(pwd)/databases:${DIR_MIRACUM}/databases" ${PARAM_DOCKER_REPO_NAME}:"${PIPELINE_VERSION}" "${DIR_MIRACUM}/miracum_pipe.sh" ${opt_args}
 
 # for running behind a proxy use this commad and fill in your proxy
@@ -107,4 +108,5 @@ docker run -it --name run-miracum-pipeline --rm ${TMP_RAM} ${VOLUME_CONF} \
 #  -v "$(pwd)/assets/references:${DIR_MIRACUM}/assets/references" \
 #  -v "$(pwd)/tools/annovar:${DIR_MIRACUM}/tools/annovar" \
 #  -v "$(pwd)/tools/gatk:${DIR_MIRACUM}/tools/gatk" \
+#  -v "$(pwd)/tools/fusioncatcher/data:${DIR_MIRACUM}/tools/fusioncatcher/data" \
 #  -v "$(pwd)/databases:${DIR_MIRACUM}/databases" ${PARAM_DOCKER_REPO_NAME}:"${PIPELINE_VERSION}" "${DIR_MIRACUM}/miracum_pipe.sh" ${opt_args}
