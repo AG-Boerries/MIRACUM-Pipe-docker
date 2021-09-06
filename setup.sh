@@ -5,7 +5,7 @@ SCRIPT_PATH=$(
   pwd -P
 )
 
-readonly VALID_TASKS=("all db_install db_setup tools_install tools_setup fusioncatcherdb ref example")
+readonly VALID_TASKS=("all db_install db_setup tools_install tools_setup fusioncatcherdb ref example install_gatk install_gatk4 install_annovar")
 
 function join_by { local IFS="$1"; shift; echo "$*"; }
 
@@ -281,6 +281,18 @@ case "${PARAM_TASK}" in
   "tools_install") 
     install_tool_gatk
     install_tool_gatk4
+    install_tool_annovar
+  ;;
+
+  "install_gatk")
+    install_tool_gatk
+  ;;
+
+  "install_gatk4")
+    install_tool_gatk4
+  ;;
+
+  "install_annovar")
     install_tool_annovar
   ;;
 
