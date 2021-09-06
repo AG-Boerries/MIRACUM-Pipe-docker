@@ -146,7 +146,7 @@ function install_tool_gatk4() {
 
   echo "fetching gatk"
   # download new version
-  wget "https://github.com/broadinstitute/gatk/releases/download/4.2.0.0/gatk-4.2.0.0.zip" \
+  wget "https://github.com/broadinstitute/gatk/releases/download/4.2.1.0/gatk-4.2.1.0.zip" \
       -O gatk4.zip
 
   # unpack
@@ -193,11 +193,11 @@ function setup_tool_annovar() {
 
   # Download proposed databases directly from ANNOVAR
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb/
-  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp41a humandb/
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp42a humandb/
   # only take gnomAD_genome
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad211_genome humandb/ # version 2.1.1
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar avsnp150 humandb/
-  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar clinvar_20210123 humandb/
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar clinvar_20210501 humandb/
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar intervar_20180118 humandb/
 
   echo "done"
