@@ -4,13 +4,10 @@
 # tools
 tools/annovar/*
 !tools/annovar/.gitkeep
-
 tools/gatk/*
 !tools/gatk/.gitkeep
-
 tools/gatk4/*
 !tools/gatk4/.gitkeep
-
 tools/fusioncatcher/*
 !tools/fusioncatcher/.gitkeep
 
