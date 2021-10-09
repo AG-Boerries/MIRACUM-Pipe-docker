@@ -112,18 +112,20 @@ function setup_references() {
 
 # TOOLS
 ######################################################################################
-version_GATK="3.8-1-0-gf15c1c3ef"
+# Versions
+readonly VERSION_GATK3="3.8-1-0-gf15c1c3ef"
+readonly VERSION_GATK4="4.2.2.0"
 
 ########
 # GATK #
 ########
 function install_tool_gatk() {
-  echo "installing tool gatk"
+  echo "installing tool gatk3"
   cd "${DIR_TOOLS}" || exit 1
 
   echo "fetching gatk"
   # download new version
-  wget "https://storage.googleapis.com/gatk-software/package-archive/gatk/GenomeAnalysisTK-3.8-1-0-gf15c1c3ef.tar.bz2" \
+  wget "https://storage.googleapis.com/gatk-software/package-archive/gatk/GenomeAnalysisTK-${VERSION_GATK3}.tar.bz2" \
       -O gatk.tar.bz2
 
   # unpack
@@ -146,7 +148,7 @@ function install_tool_gatk4() {
 
   echo "fetching gatk"
   # download new version
-  wget "https://github.com/broadinstitute/gatk/releases/download/4.2.1.0/gatk-4.2.1.0.zip" \
+  wget "https://github.com/broadinstitute/gatk/releases/download/${VERSION_GATK4}/gatk-${VERSION_GATK4}.zip" \
       -O gatk4.zip
 
   # unpack
@@ -194,8 +196,7 @@ function setup_tool_annovar() {
   # Download proposed databases directly from ANNOVAR
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb/
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp42a humandb/
-  # only take gnomAD_genome
-  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad211_genome humandb/ # version 2.1.1
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad211_genome humandb/
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar avsnp150 humandb/
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar clinvar_20210501 humandb/
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar intervar_20180118 humandb/
@@ -247,9 +248,6 @@ function install_databases() {
 
   # DGIdb
   wget https://www.dgidb.org/data/monthly_tsvs/2020-Oct/interactions.tsv -O DGIdb_interactions.tsv
-
-  # MSIseq db
-  wget http://steverozen.net/data/Hg19repeats.rda
 
   echo "done"
 }
