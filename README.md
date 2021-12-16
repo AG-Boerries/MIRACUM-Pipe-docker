@@ -13,7 +13,7 @@ We prepared this project in a way which allows you to easily add the specific co
 Prior running the setup script, some components need to be installed manually:
 
 - tools
-  - [annovar](http://download.openbioinformatics.org/annovar_download_form.php)
+  - [annovar](https://annovar.openbioinformatics.org/en/latest/user-guide/download/)
 
 - databases
   - [hallmark gene-sets](http://software.broadinstitute.org/gsea/msigdb/)
