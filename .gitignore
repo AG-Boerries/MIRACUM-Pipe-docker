@@ -29,3 +29,7 @@ assets/references/*
 # assets/output
 assets/output/*
 !assets/output/.gitkeep
+
+# .DS_Store
+.DS_Store
+assets/.DS_Store

@@ -82,7 +82,7 @@ function curlgdrive() {
 ######################################################################################
 function setup_example() {
   echo "setting up example data"
-   
+
   curlgdrive "1gcCmsqJpbMsLSLmRfo3Afc_aTJVX7ziK" Capture_Regions.tar.gz
   curlgdrive "1YQLyUtkZALZ5Bv-MTvEJJOXAOT_R59Z7" data.tar.gz
 
@@ -114,7 +114,7 @@ function setup_references() {
 ######################################################################################
 # Versions
 readonly VERSION_GATK3="3.8-1-0-gf15c1c3ef"
-readonly VERSION_GATK4="4.2.2.0"
+readonly VERSION_GATK4="4.2.4.0"
 
 ########
 # GATK #
