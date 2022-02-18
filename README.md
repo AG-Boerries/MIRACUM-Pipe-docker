@@ -120,14 +120,20 @@ common:
 
 #### Example for tNGS; protocol paramter: panel
 
-Place the tumor files (R1 and R2) into the *input* folder. Adjust your `patient.yaml` accordingly:
+Place all the tumor DNA files (R1 and R2) into the *input* folder. Additionally, add all tumor RNA files to a dedicated RNA folder. Adjust your `patient.yaml` accordingly:
 
 ```yaml
 [..]
 common:
   files:
-    tumor_R1: tumor_R1.fastq.gz
-    tumor_R2: tumor_R2.fastq.gz
+    # base filenames of the input files, e.g. sample_ID_DNA_S7_L00 for sample_ID_DNA_S7_L001_R1_001.fastq.gz, and provide the number of paired-end files, i.e. only give the number for one direction (R1 or R2)
+    panel:
+        tumor: MT21-28037-DNA_S7_L00
+        numberOfFiles: 4
+  entity: ESCA
+  RNA:
+    # folder contatining RNA fastq files for RNA fusions
+    folder: RNA
   protocol: panel
 ```
 
