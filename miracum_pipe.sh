@@ -90,7 +90,7 @@ fi
 
 echo "running \"${DIR_MIRACUM}/miracum_pipe.sh ${opt_args}\" of docker miracumpipe:${PIPELINE_VERSION}"
 echo "---"
-docker run -it --name run-miracum-pipeline --rm ${TMP_RAM} ${VOLUME_CONF} \
+docker run -it --name run-miracum-pipeline_${PARAM_DIR_PATIENT} --rm ${TMP_RAM} ${VOLUME_CONF} \
   -u $(id -u $USER) \
   -v "$(pwd)/assets/input:${DIR_MIRACUM}/assets/input" \
   -v "$(pwd)/assets/output:${DIR_MIRACUM}/assets/output" \
