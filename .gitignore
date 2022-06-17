@@ -17,7 +17,8 @@ databases/*
 
 # assets/input
 assets/input/*
-!assets/input/example_patient.yaml
+!assets/input/example_WES_patient.yaml
+!assets/input/example_TSO500_patient.yaml
 !assets/input/.gitkeep
 
 # assets/references
