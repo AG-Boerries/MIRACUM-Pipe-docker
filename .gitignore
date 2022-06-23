@@ -27,6 +27,7 @@ assets/references/*
 !assets/references/cnvkit/.gitkeep
 !assets/references/mappability/.gitkeep
 !assets/references/sequencing/.gitkeep
+!assets/references/sequenza/.gitkeep
 
 # assets/output
 assets/output/*
