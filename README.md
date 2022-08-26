@@ -6,6 +6,11 @@ This repo offers a framework to easily work with the dockerized version of [MIRA
 
 MIRACUM-Pipe is intended for research use only and not for patient treatment, diagnosis and/or medical records!
 
+## Citation
+
+If you use this repositors please cite:
+[![DOI](https://zenodo.org/badge/200218138.svg)](https://zenodo.org/badge/latestdoi/200218138)
+
 ## Setup and installation
 
 In order to run the miracum pipeline, one needs to setup tools and databases which we are not allowed to ship due to license issues.
