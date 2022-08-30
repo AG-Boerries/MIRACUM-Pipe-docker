@@ -125,7 +125,7 @@ common:
 
 #### Example for tNGS; protocol paramter: panel
 
-Place all the tumor DNA files (R1 and R2) into the *input* folder. Additionally, add all tumor RNA files to a dedicated RNA folder. Adjust your `patient.yaml` accordingly:
+Place all the tumor DNA files (R1 and R2) into the *input* folder. Additionally, add all tumor RNA files to a dedicated RNA folder. The pipeline currently assumes that you provide 4 files per "direction" i.e., R1 and R2 respectively. Adjust your `patient.yaml` accordingly:
 
 ```yaml
 [..]
@@ -142,13 +142,18 @@ common:
   protocol: panel
 ```
 
-Additionally, a flatReference, i.e. a control, file has to be supplied for cnvkit to identify CNVs. The file has to be constructed according to the used capture kit/sequencing kit. Building the file is described on the developer homepage [cnvkit](https://cnvkit.readthedocs.io/en/stable/pipeline.html#with-no-control-samples). For each sequencing kit respectively panel, the flatReference file has to be constructed only once and it can be re-used for all panels of the same kind.
+Additionally, a non-matching normal BAM file is required for sequenza to work. If you don't analyse all the chromosomes you have to adjust the `chromosomes` entry accordingly.
 
 ```yaml
 [..]
-tools:
-  cnvkit:
-    flatReference: FlatReference_TruSight_Tumor.cnn
+sequenza:
+  # define sequenza-utils parameter
+  # --window WINDOW; Window size used for binning the original seqz file. Default is 50.
+  window: 50
+  # if used for samples without mathcing normal as control a separate non-matching-normal file in bam format is needed;
+  # file should be stored in references/sequenza
+  nonMatchingNormal: non_matching_normal.bam
+  chromosomes: chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22 chrX
 ```
 
 #### Example for tumor only analysis; protocol parameter: tumorOnly
@@ -159,14 +164,30 @@ Place the tumor files (R1 and R2) into the *input* folder. Adjust your `patient.
 [..]
 common:
   files:
-    tumor_R1: tumor_R1.fastq.gz
-    tumor_R2: tumor_R2.fastq.gz
+      # filenames of the input files as fastq.gz
+      tumor_R1: tumor_R1.fastq.gz
+      tumor_R2: tumor_R2.fastq.gz
+      entity: BRCA
   protocol: tumorOnly
+```
+
+Additionally, a non-matching normal BAM file is required for sequenza to work. If you don't analyse all the chromosomes you have to adjust the `chromosomes` entry accordingly.
+
+```yaml
+[..]
+sequenza:
+  # define sequenza-utils parameter
+  # --window WINDOW; Window size used for binning the original seqz file. Default is 50.
+  window: 50
+  # if used for samples without mathcing normal as control a separate non-matching-normal file in bam format is needed;
+  # file should be stored in references/sequenza
+  nonMatchingNormal: non_matching_normal.bam
+  chromosomes: chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22 chrX
 ```
 
 ### Setting up the environment
 
-The `costum.yaml`is intended to add parameters specifying the local environment. This could encompass the resources available, i.e. number of cores and memory, the processing author as well as the reference genome and / or capture region files.
+The `costum.yaml` is intended to add parameters specifying the local environment. This could encompass the resources available, i.e. number of cores and memory, the processing author as well as the reference genome and / or capture region files.
 Of course, all the settings could be set in the `patient.yaml`as well.
 
 ```yaml
