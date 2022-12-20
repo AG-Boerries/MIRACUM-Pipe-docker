@@ -249,18 +249,18 @@ For more information see at the help of the command by running:
 
 #### tNGS
 
-Assumption: Patient folder name *TST170_example* within the *input* folder under assets/input.
+Assumption: Patient folder name *TSO500_example* within the *input* folder under assets/input.
 
 - run complete pipeline on one patient
   
   ```bash
-  ./miracum_pipe.sh -p panel -d TST170_example
+  ./miracum_pipe.sh -p panel -d TSO500_example
   ```
 
 - run a specific task on a given patient; possible tasks *td* (tumor sample alignment), *vc* (variant calling), *cnv* (copy number calling), *vc_cnv_parallel* (vc and cnv in parallel) *report* (report generation)
   
   ```bash
-  ./miracum_pipe.sh -p panel -d TST170_example -t task
+  ./miracum_pipe.sh -p panel -d TSO500_example -t task
   ```
 
 - run all unprocessed (no .processed file in the dir) patients

@@ -3,8 +3,8 @@
 ## Release v4.0.0
 
 * Integration of Mutect2 (GATK4) for tumorOnly and Panel variant calling
-* Analysis of the TSO500 panel handels of the DNA and RNA part of the panel
-* Calcualtion of various complex biomarkers like TMB, MSI, HRD,
+* Analysis of the TSO500 panel including DNA and RNA parts of the panel
+* Calcualtion of various complex biomarkers like TMB, MSI, HRD, etc.
 * Calcualtion of more QC metrics, e.g. bioinformatic tumor cell content (purity)
 * Various bugfixes
 * Adjustments of the PDF report mainly structure and readability
