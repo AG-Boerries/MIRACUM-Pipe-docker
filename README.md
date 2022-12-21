@@ -125,24 +125,35 @@ common:
 
 #### Example for tNGS; protocol paramter: panel
 
-Place the tumor files (R1 and R2) into the *input* folder. Adjust your `patient.yaml` accordingly:
+Place all the tumor DNA files (R1 and R2) into the *input* folder. Additionally, add all tumor RNA files to a dedicated RNA folder. The pipeline currently assumes that you provide 4 files per "direction" i.e., R1 and R2 respectively. Adjust your `patient.yaml` accordingly:
 
 ```yaml
 [..]
 common:
   files:
-    tumor_R1: tumor_R1.fastq.gz
-    tumor_R2: tumor_R2.fastq.gz
+    # base filenames of the input files, e.g. sample_ID_DNA_S7_L00 for sample_ID_DNA_S7_L001_R1_001.fastq.gz, and provide the number of paired-end files, i.e. only give the number for one direction (R1 or R2)
+    panel:
+        tumor: MT21-28037-DNA_S7_L00
+        numberOfFiles: 4
+  entity: ESCA
+  RNA:
+    # folder contatining RNA fastq files for RNA fusions
+    folder: RNA
   protocol: panel
 ```
 
-Additionally, a flatReference, i.e. a control, file has to be supplied for cnvkit to identify CNVs. The file has to be constructed according to the used capture kit/sequencing kit. Building the file is described on the developer homepage [cnvkit](https://cnvkit.readthedocs.io/en/stable/pipeline.html#with-no-control-samples). For each sequencing kit respectively panel, the flatReference file has to be constructed only once and it can be re-used for all panels of the same kind.
+Additionally, a non-matching normal BAM file is required for sequenza to work. If you don't analyse all the chromosomes you have to adjust the `chromosomes` entry accordingly.
 
 ```yaml
 [..]
-tools:
-  cnvkit:
-    flatReference: FlatReference_TruSight_Tumor.cnn
+sequenza:
+  # define sequenza-utils parameter
+  # --window WINDOW; Window size used for binning the original seqz file. Default is 50.
+  window: 50
+  # if used for samples without mathcing normal as control a separate non-matching-normal file in bam format is needed;
+  # file should be stored in references/sequenza
+  nonMatchingNormal: non_matching_normal.bam
+  chromosomes: chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22 chrX
 ```
 
 #### Example for tumor only analysis; protocol parameter: tumorOnly
@@ -153,14 +164,30 @@ Place the tumor files (R1 and R2) into the *input* folder. Adjust your `patient.
 [..]
 common:
   files:
-    tumor_R1: tumor_R1.fastq.gz
-    tumor_R2: tumor_R2.fastq.gz
+      # filenames of the input files as fastq.gz
+      tumor_R1: tumor_R1.fastq.gz
+      tumor_R2: tumor_R2.fastq.gz
+      entity: BRCA
   protocol: tumorOnly
+```
+
+Additionally, a non-matching normal BAM file is required for sequenza to work. If you don't analyse all the chromosomes you have to adjust the `chromosomes` entry accordingly.
+
+```yaml
+[..]
+sequenza:
+  # define sequenza-utils parameter
+  # --window WINDOW; Window size used for binning the original seqz file. Default is 50.
+  window: 50
+  # if used for samples without mathcing normal as control a separate non-matching-normal file in bam format is needed;
+  # file should be stored in references/sequenza
+  nonMatchingNormal: non_matching_normal.bam
+  chromosomes: chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22 chrX
 ```
 
 ### Setting up the environment
 
-The `costum.yaml`is intended to add parameters specifying the local environment. This could encompass the resources available, i.e. number of cores and memory, the processing author as well as the reference genome and / or capture region files.
+The `costum.yaml` is intended to add parameters specifying the local environment. This could encompass the resources available, i.e. number of cores and memory, the processing author as well as the reference genome and / or capture region files.
 Of course, all the settings could be set in the `patient.yaml`as well.
 
 ```yaml
@@ -222,18 +249,18 @@ For more information see at the help of the command by running:
 
 #### tNGS
 
-Assumption: Patient folder name *TST170_example* within the *input* folder under assets/input.
+Assumption: Patient folder name *TSO500_example* within the *input* folder under assets/input.
 
 - run complete pipeline on one patient
   
   ```bash
-  ./miracum_pipe.sh -p panel -d TST170_example
+  ./miracum_pipe.sh -p panel -d TSO500_example
   ```
 
 - run a specific task on a given patient; possible tasks *td* (tumor sample alignment), *vc* (variant calling), *cnv* (copy number calling), *vc_cnv_parallel* (vc and cnv in parallel) *report* (report generation)
   
   ```bash
-  ./miracum_pipe.sh -p panel -d TST170_example -t task
+  ./miracum_pipe.sh -p panel -d TSO500_example -t task
   ```
 
 - run all unprocessed (no .processed file in the dir) patients
@@ -300,6 +327,23 @@ In `conf/custom.yaml` one can setup ressource parameters as cpucores and memory.
 ## Run the docker image behind a proxy
 
 If you need a proxy to connect to the internet you need to change the command running the docker. We provided the needed parameters in the docker run command. You only need to uncomment the lines 86-93 in [miracum_pipe.sh](https://github.com/AG-Boerries/MIRACUM-Pipe-docker/blob/master/miracum_pipe.sh), add the proxy server address and port and comment or delete the lines 76-83.
+
+## Used annotation databases
+
+The following annotation databases are used during runtime of MIRACUM-Pipe. The default set could be easily extended.
+
+- refGene
+- dbNSFP v4.1a
+- gnomAD v2.1.1 (Genome)
+- dbSNP
+- ClinVar
+- InterVar
+- COSMIC v91
+- OncoKB
+  - Actionalbe Genes
+  - Cancer Genes
+- FANNSDB (Condel)
+- TARGET DB
 
 ## Limitations
 

@@ -5,7 +5,7 @@ SCRIPT_PATH=$(
   pwd -P
 )
 
-readonly VALID_TASKS=("all db_install db_setup tools_install tools_setup ref example")
+readonly VALID_TASKS=("all db_install db_setup tools_install tools_setup fusioncatcherdb ref example install_gatk install_gatk4 install_annovar")
 
 function join_by { local IFS="$1"; shift; echo "$*"; }
 
@@ -82,7 +82,7 @@ function curlgdrive() {
 ######################################################################################
 function setup_example() {
   echo "setting up example data"
-   
+
   curlgdrive "1gcCmsqJpbMsLSLmRfo3Afc_aTJVX7ziK" Capture_Regions.tar.gz
   curlgdrive "1YQLyUtkZALZ5Bv-MTvEJJOXAOT_R59Z7" data.tar.gz
 
@@ -112,18 +112,20 @@ function setup_references() {
 
 # TOOLS
 ######################################################################################
-version_GATK="3.8-1-0-gf15c1c3ef"
+# Versions
+readonly VERSION_GATK3="3.8-1-0-gf15c1c3ef"
+readonly VERSION_GATK4="4.2.4.0"
 
 ########
 # GATK #
 ########
 function install_tool_gatk() {
-  echo "installing tool gatk"
+  echo "installing tool gatk3"
   cd "${DIR_TOOLS}" || exit 1
 
   echo "fetching gatk"
   # download new version
-  wget "https://storage.googleapis.com/gatk-software/package-archive/gatk/GenomeAnalysisTK-3.8-1-0-gf15c1c3ef.tar.bz2" \
+  wget "https://storage.googleapis.com/gatk-software/package-archive/gatk/GenomeAnalysisTK-${VERSION_GATK3}.tar.bz2" \
       -O gatk.tar.bz2
 
   # unpack
@@ -137,7 +139,28 @@ function install_tool_gatk() {
   echo "done"
 }
 
+#########
+# GATK4 #
+#########
+function install_tool_gatk4() {
+  echo "installing tool gatk4"
+  cd "${DIR_TOOLS}" || exit 1
 
+  echo "fetching gatk"
+  # download new version
+  wget "https://github.com/broadinstitute/gatk/releases/download/${VERSION_GATK4}/gatk-${VERSION_GATK4}.zip" \
+      -O gatk4.zip
+
+  # unpack
+  unzip -o gatk4.zip
+  rm -f gatk4.zip
+
+  # rename folder and file (neglect version information)
+  mv gatk-4*/* gatk4/
+  rm -rf gatk-4*
+
+  echo "done"
+}
 
 ###########
 # annovar #
@@ -172,13 +195,40 @@ function setup_tool_annovar() {
 
   # Download proposed databases directly from ANNOVAR
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar refGene humandb/
-  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp41a humandb/
-  # only take gnomAD_genome
-  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad211_genome humandb/ # version 2.1.1
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar dbnsfp42a humandb/
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar gnomad211_genome humandb/
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar avsnp150 humandb/
-  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar clinvar_20200316 humandb/
+  ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar clinvar_20210501 humandb/
   ./annotate_variation.pl -buildver hg19 -downdb -webfrom annovar intervar_20180118 humandb/
 
+  echo "done"
+}
+
+function setup_tool_fusioncatcher() {
+  echo "setup tool fusioncatcher"
+  echo "download database"
+
+  mkdir -p "${DIR_TOOLS}/fusioncatcher/data"
+  cd "${DIR_TOOLS}/fusioncatcher/data" || exit 1
+  wget --no-check-certificate http://sourceforge.net/projects/fusioncatcher/files/data/human_v102.tar.gz.aa -O human_v102.tar.gz.aa
+  wget --no-check-certificate http://sourceforge.net/projects/fusioncatcher/files/data/human_v102.tar.gz.ab -O human_v102.tar.gz.ab
+  wget --no-check-certificate http://sourceforge.net/projects/fusioncatcher/files/data/human_v102.tar.gz.ac -O human_v102.tar.gz.ac
+  wget --no-check-certificate http://sourceforge.net/projects/fusioncatcher/files/data/human_v102.tar.gz.ad -O human_v102.tar.gz.ad
+  wget --no-check-certificate http://sourceforge.net/projects/fusioncatcher/files/data/human_v102.md5 -O human_v102.md5
+  md5sum -c human_v102.md5
+  if [ "$?" -ne "0" ]; then
+    echo -e "\n\n\n\033[33;7m   ERROR: The downloaded files from above have errors! MD5 checksums do not match! Please, download them again or re-run this script again!   \033[0m\n"
+    exit 1
+  fi
+
+  cat human_v102.tar.gz.* > human_v102.tar.gz
+  rm -f human_v102.tar.gz.*
+
+  tar -xzf human_v102.tar.gz
+  ln -s human_v102 current
+
+  rm -f human_v102.tar.gz
+  rm -f human_v102.md5
   echo "done"
 }
 
@@ -228,6 +278,19 @@ function setup_databases() {
 case "${PARAM_TASK}" in
   "tools_install") 
     install_tool_gatk
+    install_tool_gatk4
+    install_tool_annovar
+  ;;
+
+  "install_gatk")
+    install_tool_gatk
+  ;;
+
+  "install_gatk4")
+    install_tool_gatk4
+  ;;
+
+  "install_annovar")
     install_tool_annovar
   ;;
 
@@ -243,6 +306,10 @@ case "${PARAM_TASK}" in
     setup_tool_annovar
   ;;
 
+  "fusioncatcherdb")
+    setup_tool_fusioncatcher
+  ;;
+
   "ref")
     setup_references
   ;;
@@ -253,6 +320,7 @@ case "${PARAM_TASK}" in
 
   *) 
     install_tool_gatk
+    install_tool_gatk4
     install_tool_annovar
     setup_tool_annovar
 

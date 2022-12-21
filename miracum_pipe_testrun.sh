@@ -46,17 +46,6 @@ done
 [[ -z "${PIPELINE_VERSION}" ]] && PIPELINE_VERSION='latest'
 [[ "${SHOW_USAGE}" ]] && usage "${PARAM_DOCKER_REPO_NAME}" "${PIPELINE_VERSION}"
 
-if [[ ! -z "${PARAM_PROTOCOL}" ]]; then
-  if [[ ! " ${VALID_PROTOCOLS[@]} " =~ " ${PARAM_PROTOCOL} " ]]; then
-    echo "unknown protocol: ${PARAM_PROTOCOL}"
-    echo "use one of the following values: $(join_by ' ' ${VALID_PROTOCOLS})"
-    exit 1
-  fi
-elif [[ -z "${PARAM_PROTOCOL}" ]]; then
-  echo "no protocol specified!"
-  exit 1
-fi
-
 # conf as volume
 if [[ -d $(pwd)/conf ]]; then
   readonly VOLUME_CONF="-v $(pwd)/conf/custom.yaml:${DIR_MIRACUM}/conf/custom.yaml"
@@ -91,10 +80,11 @@ fi
 echo "running \"${DIR_MIRACUM}/miracum_pipe.sh ${opt_args}\" of docker miracumpipe:${PIPELINE_VERSION}"
 echo "---"
 docker run -it --name run-miracum-pipeline --rm ${TMP_RAM} ${VOLUME_CONF} \
-  -u $(id -u $USER) \
   -v "$(pwd)/assets/input:${DIR_MIRACUM}/assets/input" \
   -v "$(pwd)/assets/output:${DIR_MIRACUM}/assets/output" \
   -v "$(pwd)/assets/references:${DIR_MIRACUM}/assets/references" \
   -v "$(pwd)/tools/annovar:${DIR_MIRACUM}/tools/annovar" \
   -v "$(pwd)/tools/gatk:${DIR_MIRACUM}/tools/gatk" \
-  -v "$(pwd)/databases:${DIR_MIRACUM}/databases" ${PARAM_DOCKER_REPO_NAME}:"${PIPELINE_VERSION}" bash
+  -v "$(pwd)/tools/gatk4:${DIR_MIRACUM}/tools/gatk4" \
+  -v "$(pwd)/tools/fusioncatcher/data:${DIR_MIRACUM}/tools/fusioncatcher/data" \
+  -v "$(pwd)/databases:${DIR_MIRACUM}/databases" ${PARAM_DOCKER_REPO_NAME}:"${PIPELINE_VERSION}" /bin/bash
