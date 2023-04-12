@@ -121,6 +121,7 @@ common:
     germline_R1: germline_R1.fastq.gz
     germline_R2: germline_R2.fastq.gz
   protocol: wes
+  entity: Other
 ```
 
 #### Example for tNGS; protocol paramter: panel
@@ -362,7 +363,7 @@ MIRACUM-Pipe is currently test for the whole-exome protocol for the capture kits
 
 The name of the kit has to be supplied with the *captureRegionName* parameter. We introduced abbreviations for Agilent6withoutUTRs (V6), Agilent6withUTRs (V6UTR) and Agilent5withUTRs (V5UTR) which could be used.
 
-For the tNGS protocol MIRACUM-Pipe is tested for the Illumina TruSight Tumor 170 panel.
+For the tNGS protocol MIRACUM-Pipe is tested for the Illumina TSO500 panel.
 
 ## License
 
