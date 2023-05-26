@@ -1,6 +1,7 @@
 # MIRACUM-Pipe-docker
 
-This repo offers a framework to easily work with the dockerized version of [MIRACUM-Pipe](https://github.com/AG-Boerries/MIRACUM-Pipe)
+This repo offers a framework to easily work with the dockerized version of [MIRACUM-Pipe](https://github.com/AG-Boerries/MIRACUM-Pipe).
+An example PDF report can be found under `assets/output`.
 
 ## Disclaimer
 
