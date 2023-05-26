@@ -32,6 +32,7 @@ assets/references/*
 # assets/output
 assets/output/*
 !assets/output/.gitkeep
+!assets/output/somaticGermline_Patient_example_Report.pdf
 
 # .DS_Store
 .DS_Store

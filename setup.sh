@@ -170,7 +170,7 @@ function install_tool_annovar() {
 
   cd "${DIR_TOOLS}" || exit 1
 
-  echo "please visit http://download.openbioinformatics.org/annovar_download_form.php to get the download link for annovar via an email"
+  echo "please visit https://www.openbioinformatics.org/annovar/annovar_download_form.php to get the download link for annovar via an email"
   echo "enter annovar download link:"
   read -r url_annovar
 
