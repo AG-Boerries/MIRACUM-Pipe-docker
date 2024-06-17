@@ -69,13 +69,15 @@ function curlgdrive() {
   local fileid="${1}"
   local filename="${2}"
   local cookiefile="cookie-${fileid}"
+  local uuid_file="google_uuid.txt"
 
   # download file using cookie information
-  curl -c "${SCRIPT_PATH}/${cookiefile}" -s -L "https://drive.google.com/uc?export=download&id=${fileid}" > /dev/null
-  curl -Lb "${SCRIPT_PATH}/${cookiefile}" "https://drive.google.com/uc?export=download&confirm=`awk '/download/ {print $NF}' ${SCRIPT_PATH}/${cookiefile}`&id=${fileid}" -o "${filename}"
+  wget --save-cookies "${SCRIPT_PATH}/${cookiefile}" "https://docs.google.com/uc?export=download&id=${fileid}" -O- | sed -rn 's/.*name="uuid" value=\"([0-9A-Za-z_\-]+).*/\1/p' > ${uuid_file}
+  wget --load-cookies "${SCRIPT_PATH}/${cookiefile}" -O ${filename} "https://drive.usercontent.google.com/download?export=download&id=${fileid}&confirm=t&uuid="$(<google_uuid.txt)
 
-  # remove cookie
+  # cleanup
   rm -f "${SCRIPT_PATH}/${cookiefile}"
+  rm -f ${uuid_file}
 }
 
 # example
