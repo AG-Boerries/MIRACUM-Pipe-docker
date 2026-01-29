@@ -1,3 +1,6 @@
+## CAVE:
+The MIRACUM-Pipe is no longer maintained and updated.
+
 # MIRACUM-Pipe-docker
 
 This repo offers a framework to easily work with the dockerized version of [MIRACUM-Pipe](https://github.com/AG-Boerries/MIRACUM-Pipe).
